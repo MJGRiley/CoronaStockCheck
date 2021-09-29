@@ -1,9 +1,11 @@
 var MSAPIKey = '71dcc5160836657f52acf194332c63da'
-var ticker = "AAPL,MSFT"
-
-    
-    var qDated = "http://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&data_from=2020-02-27&symbols=" + ticker
-
+var ticker = "AAPL" //These are the temp stock tickers, tickerInput blow is correct
+var sBtn = $('#submit')
+sBtn.click(pullHData)
+var tickerInput = $('#tickersearch').val()
+console.log(tickerInput)
+function pullHData(tickerInput) {//This function only pulls historical data only from 2020-20-28
+    var qDated = "http://api.marketstack.com/v1/eod/2020-02-28?access_key=" + MSAPIKey + "&symbols=" + ticker
     fetch(qDated,{
         cache: 'reload',
     })
@@ -12,13 +14,14 @@ var ticker = "AAPL,MSFT"
     })
     .then(function (data) {
         console.log(data)
+        return data
     })
-
+}
 // CHART .JS ///
 
 // DATA
-var stars = [135850, 52122]; //y-axis labels. need a function to pull Q1 2020 stock high
-var frameworks = ['COVID-19 Crash', 'Today']; /// x-axis labels
+var stars = [135850, 52122]; //y-axis VALUES. need a function to pull Q1 2020 stock low
+var frameworks = ['COVID-19 Crash', 'Today']; /// x-axis LABELS
 
 var chart = document.getElementById('compChart');
 
@@ -47,4 +50,6 @@ var compChart = new Chart(chart, {
 function q1Low () {
 
 
+
 }
+
