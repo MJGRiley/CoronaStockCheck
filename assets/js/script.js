@@ -5,7 +5,7 @@ sBtn.click(pullHData)
 var tickerInput = $('#tickersearch').val()
 console.log(tickerInput)
 function pullHData(tickerInput) {//This function only pulls historical data only from 2020-20-28
-    var qDated = "http://api.marketstack.com/v1/eod/2020-02-28?access_key=" + MSAPIKey + "&symbols=" + ticker
+    var qDated = "http://api.marketstack.com/v1/eod/2020-02-28?access_key=" + MSAPIKey + "&symbols=" + ticker + 
     fetch(qDated,{
         cache: 'reload',
     })
@@ -20,8 +20,8 @@ function pullHData(tickerInput) {//This function only pulls historical data only
 // CHART .JS ///
 
 // DATA
-var stars = [135850, 52122]; //y-axis VALUES. need a function to pull Q1 2020 stock low
-var frameworks = ['COVID-19 Crash', 'Today']; /// x-axis LABELS
+var stars = [135850, 52122]; //y-axis VALUES. need a function to pull Q1 2020 stock high
+var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
 
 var chart = document.getElementById('compChart');
 
@@ -47,9 +47,8 @@ var compChart = new Chart(chart, {
 //import data into compChart
 //"tickersearch" is input ID
 
-function q1Low () {
-
+function q1High () {
+//call function to pull API data 
 
 
 }
-
