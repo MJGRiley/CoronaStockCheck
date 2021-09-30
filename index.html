@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Corona Stock Check</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-
     <link rel="stylesheet" href="./assets/css/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -24,21 +21,23 @@
                 price to evaluate whether they should buy in or not. </p>
         </div>
     </header>
-    <form id="tickerForm"><input id="tickerSearch" type="text" placeholder="Please Input a Ticker Here">
-    <button type='submit'>Submit</button></form>
+    <form id="tickerForm">
+      <input id="tickerSearch" type="text" placeholder="Please Input a Ticker Here">
+      <button type='submit'>Submit</button>
+    </form>
 
     <!--Container that will display ticker search data-->
     <div class="row">
     <div class="card text-center col-sm-8">
         <div class="card-body">
-            <h5 class="ticker-output">Card title: Ticker Symbol (APPL)</h5>
-            <h6 class="fullticker mb-2 text-muted">Card subtitle: Full Company Name (Apple) </h6>
+            <h5 class="ticker-output">Card title: Ticker Symbol (<span id="tickerSymbol">APPL</span>)</h5>
+            <h6 class="fullticker mb-2 text-muted">Card subtitle: Full Company Name (<span id="companyName">Apple</span>) </h6>
             <div class="row">
                 <div class="col-sm-6">
                   <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">2020 Q1 All Time High Stock Price </h5>
-                      <p class="card-text">Insert Q1 All Time High Stock Price Here </p>
+                      <h5 class="card-title">2020 Q1 All Time Highest Closing Price </h5>
+                      <p class="card-text" id="Q12020">Insert Q1 All Time High Stock Price Here </p>
                      
                     </div>
                   </div>
@@ -47,7 +46,7 @@
                   <div class="card">
                     <div class="card-body">
                       <h5 class="card-title">Current Price</h5>
-                      <p class="card-text">Insert Current Stock Price Here</p>
+                      <p class="card-text" id="currentPrice">Insert Current Stock Price Here</p>
                     </div>
                   </div>
                 </div>
@@ -56,11 +55,11 @@
                       <div class="card-body">
                         <h5 class="card-title"> Notable Data:</h5>
                         <ul id="notabledata" class="card-text text-left">
-                            <li>52 Week High:</li>
-                            <li>52 Week Low:</li>
-                            <li>Volume:</li>
-                            <li>Open:</li>
-                            <li>Close:</li>
+                            <li>52 Week High: id="allTH"<span></span></li>
+                            <li>52 Week Low: id="allTL"<span></span></li>
+                            <li>Volume: id="volume"<span></span></li>
+                            <li>Open: id="open"<span></span></li>
+                            <li>Close: id="Close"<span></span></li>
                         </ul>
                       </div>
                     </div>
