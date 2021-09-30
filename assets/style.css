@@ -1,3 +1,21 @@
 body {
-    
+    background-color:black !important;
+    margin: 0;
+    padding: 0;
+
+}
+
+header {
+    background-color: rgb(42, 91, 165) !important;
+    color: white;
+    font-size: 15px;
+    margin: 0;
+    padding: 2px;
+
+}
+
+#notabledata li {
+    list-style-type: none;
+}
+
 }
