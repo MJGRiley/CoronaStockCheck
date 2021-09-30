@@ -41,7 +41,11 @@ function pullHData(data) {
         console.log(data)
         hData = data
         localStorage.setItem('hData',JSON.stringify(data))
+        console.log(localStorage);
+        console.log(hData)       
+        console.log(hData.data[0].close)
     })
+    q1High();
 }
 
 // CHART .JS ///
@@ -76,8 +80,17 @@ var compChart = new Chart(chart, {
 //import data into compChart
 //"tickersearch" is input ID
 
+
+
 function q1High () {
-//call function to pull API data 
+ var histData =[];
+ console.log(hdata.length)
+ // create array of all closes
+    for (i =0; i < hData.length; i++){
+        histData[i] = hData.close[i]
+
+    }
+console.log (histData)
 
 
 }
