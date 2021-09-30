@@ -1,12 +1,37 @@
 var MSAPIKey = '71dcc5160836657f52acf194332c63da'
-var ticker = "AAPL" //These are the temp stock tickers, tickerInput blow is correct
-var sBtn = $('#submit')
-sBtn.click(pullHData)
-var tickerInput = $('#tickersearch').val()
-console.log(tickerInput)
-function pullHData(tickerInput) {//This function only pulls historical data only from 2020-20-28
-    var qDated = "http://api.marketstack.com/v1/eod/2020-02-28?access_key=" + MSAPIKey + "&symbols=" + ticker + 
-    fetch(qDated,{
+var today
+var cData = []
+var hData = []
+var form = $('#tickerForm')
+var tArea = $('#tickerSearch')
+form.submit( function(event) {
+    event.preventDefault()
+    pullData(tArea.val())
+    pullHData(tArea.val())
+    })
+
+function pullData(stock) {
+    console.log(stock)
+    var qCurrent =  "http://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&symbols=" + stock
+    fetch(qCurrent,{
+        cache: 'reload',
+    })
+    .then(function (res) {
+        return res.json()
+    })
+    .then(function (data) {
+        cData = data
+        today = data.data[0].date
+        console.log(data)
+        localStorage.setItem('cData',JSON.stringify(data))
+    })
+}
+
+
+function pullHData(data) {
+    console.log(data)
+    var qDates = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=2020-01-01&date_to=2020-04-01&symbols=" + data
+    fetch(qDates,{
         cache: 'reload',
     })
     .then(function (res) {
@@ -14,9 +39,11 @@ function pullHData(tickerInput) {//This function only pulls historical data only
     })
     .then(function (data) {
         console.log(data)
-        return data
+        hData = data
+        localStorage.setItem('hData',JSON.stringify(data))
     })
 }
+
 // CHART .JS ///
 
 // DATA
