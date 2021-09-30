@@ -4,7 +4,10 @@ var cData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
 var histData
-console.log(MSAPIKey)
+
+//id="Q12020">Insert Q1 All Time High Stock Price Here </p>
+//id="currentPrice">Insert Current Stock Price Here</p>
+
 
 form.submit( function(event) {
     event.preventDefault()
