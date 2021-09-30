@@ -5,13 +5,19 @@ var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
 var histData
 console.log(MSAPIKey)
+let highValue;
+let highDate;
 
-form.submit( function(event) {
+
+form.submit( 
+    
+    function(event) {
     event.preventDefault()
     pullData(tArea.val())
     pullHData(tArea.val())
     console.log("This is the beginning")
-})
+}
+)
 
 function pullData(stock) {
     console.log(stock)
@@ -73,18 +79,12 @@ var compChart = new Chart(chart, {
  }
 ) 
 
-//need a function to go thru API output object and pull Q1 2020 lowest close for a particular ticker.
-//function will: take ticker input -> use input to call API data -> index thru API data to create array of closing prices between 1/1/2020 - 4/1/2020 ->
-// use a method to get the lowest close value and the index of that value in the array. use index to get date of that closing value.
-// make an object/array to pull dates (text content for graph) between the Q1/2020 time range from
+
 //pull most recent stock close from API for other bar. most recent instead of today because user may use this app on a fed holiday or weekend
 //import data into compChart
 //"tickersearch" is input ID
 
-
-
 function q1High () {
- //var keys = Object.keys(hData)
  console.log(histData)
  // create array of all closes
  var histDataArr =[];
@@ -93,10 +93,19 @@ function q1High () {
         histDataArr[i] = histData.data[i].close
         histDates[i] = histData.data[i].date
     }
-    let high = histDataArr.indexOf(Math.max(...histDataArr));
+    let highIndex = histDataArr.indexOf(Math.max(...histDataArr));
+    highValue = histDataArr[highIndex];
+    highDate = histDates[highIndex];
+    const dateFix = highDate.split("T");
+    highDate = dateFix[0]
+    console.log('The price high is $' + highValue + ' on ' + highDate)
 
-
+    var stars = [highValue, 100]; //y-axis VALUES. need a function to pull Q1 2020 stock high
+    var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
 }
 
-
-
+function() {
+    pullData(tArea.val())
+    pullHData(tArea.val())
+    console.log("This is the beginning")
+}
