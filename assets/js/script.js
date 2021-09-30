@@ -41,7 +41,11 @@ function pullHData(data) {
         console.log(data)
         hData = data
         localStorage.setItem('hData',JSON.stringify(data))
+        console.log(localStorage);
+        console.log(hData)       
+        console.log(hData.data[0].close)
     })
+    q1High();
 }
 
 // CHART .JS ///
@@ -50,20 +54,23 @@ function pullHData(data) {
 var stars = [135850, 52122]; //y-axis VALUES. need a function to pull Q1 2020 stock high
 var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
 
-var chart = document.getElementById('compChart');
 
 //creating the BAR chart.
-// var compChart = new Chart(chart, {
-//     type: 'bar',
-//     data: {
-//         labels: frameworks,
-//         datasets: [{ 
-//             label: "Coronavirus Stock Valuation vs. Current",
-//             data: stars
-//         }]
-//     }
-//  }
-// )
+if (this.compChart) this.compChart.destroy();
+var chart = document.getElementById('compChart');
+
+var compChart = new Chart(chart, {
+    type: 'bar',
+    data: {
+        labels: frameworks,
+        datasets: [{ 
+            label: "Coronavirus Stock Valuation vs. Current",
+            data: stars
+        }]
+
+    }
+ }
+) 
 
 //need a function to go thru API output object and pull Q1 2020 lowest close for a particular ticker.
 //function will: take ticker input -> use input to call API data -> index thru API data to create array of closing prices between 1/1/2020 - 4/1/2020 ->
@@ -73,9 +80,20 @@ var chart = document.getElementById('compChart');
 //import data into compChart
 //"tickersearch" is input ID
 
+
+
 function q1High () {
-//call function to pull API data 
+ var histData =[];
+ console.log(hdata.length)
+ // create array of all closes
+    for (i =0; i < hData.length; i++){
+        histData[i] = hData.close[i]
+
+    }
+console.log (histData)
 
 
 }
+
+
 
