@@ -9,6 +9,8 @@ var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
 form.submit(dataSpy)
 
+//TODO: issue #26 
+//These are all the ids on the HTML page to link the information to
 //(<span id="tickerSymbol">APPL</span>)
 //<span id="companyName">Apple</span>
 //id="Q12020">Insert Q1 All Time High Stock Price Here </p>
@@ -23,14 +25,14 @@ form.submit(dataSpy)
 function dataSpy(event) {
     event.preventDefault()
     // need something here to detect and return out of this function if user has input something other than a stock ticker eg: number, string, more?
-    // also a modal pop up to alert the user
+    // also a modal pop up to alert the user TODO: issue #34
     pullData(tArea.val())
     pullNData(tArea.val())
     pullHData(tArea.val())
     //pullYTDData is nested in pullData because we need today's date to work with
 }
 
-function pullData(stock) {
+function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
     var qCurrent =  "http://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&symbols=" + stock
     fetch(qCurrent,{
         cache: 'reload',
@@ -47,10 +49,9 @@ function pullData(stock) {
     })
 }
 
-function pullNData(stock) {
-    var qYTD = "https://api.marketstack.com/v1/tickers?access_key=" + MSAPIKey + "&symbols=" + stock 
-    console.log(qYTD)
-    fetch(qYTD,{
+function pullNData(stock) {//This API pull gets the company name data 
+    var qNData = "https://api.marketstack.com/v1/tickers?access_key=" + MSAPIKey + "&symbols=" + stock 
+    fetch(qNData,{
         cache: 'reload',
     })
     .then(function (res) {
@@ -58,11 +59,12 @@ function pullNData(stock) {
     })
     .then(function (data) {
         nData = data
+        console.log(data)
         localStorage.setItem('nData',JSON.stringify(data))
     })
 }
 
-function pullHData(stock) {
+function pullHData(stock) { //This APi pull gets the historical data from Jan 01 2020 - Apr 01 2020
     var qHData = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=2020-01-01&date_to=2020-04-01&symbols=" + stock
     fetch(qHData,{
         cache: 'reload',
@@ -78,10 +80,9 @@ function pullHData(stock) {
     })
 }
 
-function pullYTDData(today,stock) {
-    //"&date_from=" + (today.substring(0,4)-1) + today.substring(4,10) + "&date_to=" + today.substring(0,10) + 
+function pullYTDData(today,stock) {//This API pull gets the 52 week high and low
+    // this is only returning 100 days of data, we'll have to TODO: find the 52weekhigh and 52weeklow from MarketStack
     var qDates = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + (today.substring(0,4)-1) + today.substring(4,10) + "&date_to=" + today.substring(0,10) + "&symbols=" + stock
-    console.log(qDates)
     fetch(qDates,{
         cache: 'reload',
     })
@@ -89,6 +90,7 @@ function pullYTDData(today,stock) {
         return res.json()
     })
     .then(function (data) {
+        console.log(data)
         localStorage.setItem('ytdData',JSON.stringify(data))
     })
 }
@@ -122,7 +124,7 @@ var compChart = new Chart(chart, {
 // make an object/array to pull dates (text content for graph) between the Q1/2020 time range from
 //pull most recent stock close from API for other bar. most recent instead of today because user may use this app on a fed holiday or weekend
 //import data into compChart
-//"tickersearch" is input ID
+//"tickerSearch" is input ID
 
 
 
