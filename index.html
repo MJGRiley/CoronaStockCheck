@@ -30,43 +30,42 @@
   <!--Container that will display ticker search data-->
   <div class="row">
     <div class="card text-center col-sm-8">
-      <div class="card-body">
-        <h5 class="ticker-output">Card title: Ticker Symbol (<span id="tickerSymbol">APPL</span>)</h5>
-        <h6 class="fullticker mb-2 text-muted">Card subtitle: Full Company Name (<span id="companyName">Apple</span>)
-        </h6>
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">2020 Q1 All Time Highest Closing Price </h5>
-                <p class="card-text" id="Q12020">Insert Q1 All Time High Stock Price Here </p>
-
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Current Price</h5>
-                <p class="card-text" id="currentPrice">Insert Current Stock Price Here</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-12">
-            <div class="card text-center">
-              <div class="card-body">
-                <h5 class="card-title"> Notable Data:</h5>
-                <ul id="notabledata" class="card-text text-left">
-                  <li id="allTH">52 Week High:<span></span></li>
-                  <li  id="allTL">52 Week Low: <span></span></li>
-                  <li id="volume">Volume:<span></span></li>
-                  <li id="open">Open: <span></span></li>
-                  <li id="Close">Close: <span></span></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <canvas id="compChart" width="800" height="600"></canvas>
+        <div class="card-body">
+            <h5 class="ticker-output">Card title: Ticker Symbol (<span id="tickerSymbol">APPL</span>)</h5>
+            <h6 class="fullticker mb-2 text-muted">Card subtitle: Full Company Name (<span id="companyName">Apple</span>) </h6>
+            <div class="row">
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">2020 Q1 All Time Highest Closing Price </h5>
+                      <p class="card-text" id="Q12020">Insert Q1 All Time High Stock Price Here </p>
+                     
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Current Price</h5>
+                      <p class="card-text" id="currentPrice">Insert Current Stock Price Here</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="card text-center">
+                      <div class="card-body">
+                        <h5 class="card-title"> Notable Data:</h5>
+                        <ul id="notabledata" class="card-text text-left">
+                            <li>52 Week High: <span id="allTH"></span></li>
+                            <li>52 Week Low: <span id="allTL"></span></li>
+                            <li>Volume: <span id="volume"></span></li>
+                            <li>Open: <span id="open"></span></li>
+                            <li>Close: <span id="close"></span></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <canvas id="compChart" width="800" height="600"></canvas>
 
         </div>
       </div>
