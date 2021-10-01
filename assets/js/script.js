@@ -36,6 +36,7 @@ function dataSpy(event) {
     pullNData(tArea.val())
     pullHData(tArea.val())
     pullYTDData(tArea.val())
+    searchHistory();
 }
 
 function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
