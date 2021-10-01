@@ -131,10 +131,10 @@ var compChart = new Chart(chart, {
 
 
 function q1High () {
- //var keys = Object.keys(hData)
- // create array of all closes
- var histDataArr =[];
- var histDates = [];
+    //var keys = Object.keys(hData)
+    // create array of all closes
+    var histDataArr =[];
+    var histDates = [];
     for (i =0; i < 63 ; i++){
         histDataArr[i] = histData.data[i].close
         histDates[i] = histData.data[i].date
@@ -148,18 +148,23 @@ function q1High () {
 // Watchlist Function
 //Pulling History from local storage if there is any
 function getHistory () {
-
     form.submit (function() {
-    var search = tArea.value
-    pullData (search);
-    pullHData (search);
-    searchHistory.push(search);
-    localStorage.setItem("historicalsearch",JSON.stringify(searchHistory));
-    searchHistory();
-})
+        var search = tArea.value
+        pullData (search);
+        pullHData (search);
+        //Do not allow duplicates into watchlist
+        if (searchHistory.includes(search)){
+            return
+        }
+        searchHistory.push(search);
+        searchHistory();
+    })
+    return "something";
+}
 
 function searchHistory () {
-    watchlist.innerHTML = "";
+    console.log(watchlist.innerHTML) 
+    watchlist.innerHTML= "";
     for ( var i=0; i <searchHistory.length; i++ ) {
         var history = document.createElement("input");
         history.setAttribute("type",text)
@@ -169,9 +174,7 @@ function searchHistory () {
             pullHData(history.value);
         })
         watchlist.append(history);
+    
     }
-
-}
 }
 console.log(getHistory())
-}
