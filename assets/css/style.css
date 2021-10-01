@@ -7,3 +7,7 @@ body {
 #notabledata li {
     list-style-type: none;
 }
+
+#compChart{
+    color: black
+}
