@@ -6,15 +6,24 @@ var nData = []
 var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
+<<<<<<< HEAD
+=======
 var stockTag = document.getElementById('tickerSymbol')
 var stockHigh = []
+>>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
 var yearHigh
-var stockLow = []
 var yearLow
 form.submit(dataSpy)
 var defaultTick = 'SPY'
+<<<<<<< HEAD
 var searchHistory = []
 var watchlist = $('#history')
+=======
+<<<<<<< HEAD
+var searchHistory = []
+var watchlist = $('#history')
+=======
+>>>>>>> 8081a61907471c50420a268f1d73fa31ea0a1f14
 var q1ATH = document.getElementById("Q12020")
 var cPrice = document.getElementById('currentPrice')
 var yearHighs = document.getElementById('allTH')
@@ -22,6 +31,7 @@ var yearLows = document.getElementById('allTL')
 var vol = document.getElementById('volume')
 
 
+>>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
 //TODO: issue 26
 //These are all the ids on the HTML page to link the information to
 //(<span id="tickerSymbol">APPL</span>)
@@ -43,7 +53,12 @@ function dataSpy(event) {
     pullNData(tArea.val())
     pullHData(tArea.val())
     pullYTDData(tArea.val())
+<<<<<<< HEAD
     searchHistory();
+=======
+    console.log(typeof(searchHistory))
+    searchHistory()
+>>>>>>> 8081a61907471c50420a268f1d73fa31ea0a1f14
 }
 
 function pullData(stock) {//This first pull gets latest daily market info from end of day endpoint
@@ -70,7 +85,7 @@ function pullNData(stock) {//This API pull gets the company name data from the t
             return res.json()
         })
         .then(function (data) {
-            nData = data
+            cName = data
             console.log(data)
             localStorage.setItem('nData', JSON.stringify(data))
         })
@@ -242,18 +257,26 @@ function getHistory () {
 })
 }
 
+
+function searchHistory() {
+    console.log("hey")
+    watchlist.append(tArea.val())
+    console.log(watchlist)
+
 function searchHistory () {
     watchlist.innerHTML = "";
+
     for ( var i=0; i <searchHistory.length; i++ ) {
         var history = document.createElement("input");
         history.setAttribute("type",text)
         history.setAttribute("value", searchHistory[i] )
         history.addEventListener("click",function() {  
-
+            pullNData(history.value);
+            pullData(history.value);
+            pullHData(history.value);
         })
         watchlist.append(history);
     }
-
 }
 
 function updateInfo() {
@@ -285,4 +308,5 @@ function abbreviateNumber(value) {
     }
     volume = newValue;
     return newValue;
+>>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
 }
