@@ -30,7 +30,7 @@ function dataSpy(event) {
     pullData(tArea.val())
     pullNData(tArea.val())
     pullHData(tArea.val())
-    pullYTDData(tArea.val())
+    //pullYTDData(tArea.val())
 }
 
 function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
@@ -94,7 +94,6 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
         })
         .then(function (data) {
             var dataOne = data.data
-            console.log(tempArr)
             fetch(qYTD2, {
                 cache: 'reload',
             })
@@ -102,21 +101,30 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
                 return res.json()
             })
             .then(function (data) {
-                var dataThree = data.data
-                tempArr = $.merge(dataTwo,dataThree)
-                console.log(tempArr)
-                for(i=0;i<tempArr.length;i++){
-                    console.log(typeof(tempArr))
-                    console.log(i)
-                    stockHigh[i] = tempArr[i].high
-                    stockLow[i] = tempArr[i].low
-                    console.log(stockHigh)
-                    console.log(stockLow)
-                }
+                var dataTwo = $.merge(dataOne, data.data)
+                console.log(dataTwo)
+                fetch(qYTD3, {
+                    cache: 'reload',
+                })
+                .then(function (res) {
+                    return res.json()
+                })
+                .then(function (data) {
+                    var dataThree = data.data
+                    tempArr = $.merge(dataTwo, dataThree)
+                    console.log(tempArr)
+                    console.log(tempArr.length)
+                    for (i=0;i<tempArr.length;i++) {
+                        stockHigh[i] = tempArr[i].high
+                        stockLow[i] = tempArr[i].low
+                        //displayHighLow()
+                    }
+                })
             })
-        })
     })
 }
+
+
 // CHART .JS ///
 
 // DATA
@@ -191,10 +199,37 @@ function q1High() {
     compChart.update();
 }
 
-function initialGraph(){
-    pullData('SPY')
-    pullNData('SPY')
-    pullHData('SPY')
+
+
+$(document).ready(function () {
+    pullData('AAPL')
+    pullNData('AAPL')
+    pullHData('AAPL')
+    
+})
+
+function getHistory () {
+
+    form.submit (function() {
+    var search = tArea.value
+    pullNData (search);
+    pullHData (search);
+    searchHistory.push(search);
+    searchHistory();
+})
 }
 
-initialGraph();
+function searchHistory () {
+    watchlist.innerHTML = "";
+    for ( var i=0; i <searchHistory.length; i++ ) {
+        var history = document.createElement("input");
+        history.setAttribute("type",text)
+        history.setAttribute("value", searchHistory[i] )
+        history.addEventListener("click",function() {  
+            pullNData(history.value);
+            pullHData(history.value);
+        })
+        watchlist.append(history);
+    }
+
+}
