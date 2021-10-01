@@ -28,7 +28,7 @@ function dataSpy(event) {
     pullData(tArea.val())
     pullNData(tArea.val())
     pullHData(tArea.val())
-    //pullYTDData(tArea.val())
+    pullYTDData(tArea.val())
 }
 
 function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
@@ -112,17 +112,17 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
                 var dataThree = data.data
                 tempArr = $.merge(dataTwo,dataThree)
                 console.log(tempArr)
-                tempArr.forEach(function getHigh(i){
-                    tempArr[i].high = stockHigh[i]
-                    tempArr[i].low = stockLow[i]
-                    console.log(stockHigh[i])
-                    console.log(stockLow[i])
-                })
-                
+                for(i=0;i<tempArr.length;i++){
+                    console.log(typeof(tempArr))
+                    console.log(i)
+                    stockHigh[i] = tempArr[i].high
+                    stockLow[i] = tempArr[i].low
+                    console.log(stockHigh)
+                    console.log(stockLow)
+                }
             })
         })
     })
-    console.log(tempArr)
 }
 // CHART .JS ///
 
