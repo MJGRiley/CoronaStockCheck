@@ -1,11 +1,12 @@
 var MSAPIKey = '71dcc5160836657f52acf194332c63da'
-var cName
+var cName = document.getElementById('companyName')
 var cData = []
 var histData = []
 var nData = []
 var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
+var stockTag = document.getElementById('tickerSymbol')
 var stockHigh = []
 var yearHigh
 var stockLow = []
@@ -14,6 +15,12 @@ form.submit(dataSpy)
 var defaultTick = 'SPY'
 var searchHistory = []
 var watchlist = $('#history')
+var q1ATH = document.getElementById("Q12020")
+var cPrice = document.getElementById('currentPrice')
+var yearHighs = document.getElementById('allTH')
+var yearLows = document.getElementById('allTL')
+var vol = document.getElementById('volume')
+
 
 //TODO: issue 26
 //These are all the ids on the HTML page to link the information to
@@ -39,7 +46,7 @@ function dataSpy(event) {
     searchHistory();
 }
 
-function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
+function pullData(stock) {//This first pull gets latest daily market info from end of day endpoint
     var qCurrent = "http://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&symbols=" + stock
     fetch(qCurrent, {
         cache: 'reload',
@@ -54,7 +61,7 @@ function pullData(stock) {//This first pull gets current daily market info, not 
         })
 }
 
-function pullNData(stock) {//This API pull gets the company name data 
+function pullNData(stock) {//This API pull gets the company name data from the tickers endpoint
     var qNData = "https://api.marketstack.com/v1/tickers?access_key=" + MSAPIKey + "&symbols=" + stock
     fetch(qNData, {
         cache: 'reload',
@@ -86,8 +93,8 @@ function pullHData(stock) { //This APi pull gets the historical data from Jan 01
 }
 
 function pullYTDData(stock) {//This API pull gets the 52 week high and low
-    var stockHigh = []
-    var stockLow = []
+    var stockHigh = []      //the API only delivers 100 items in the object
+    var stockLow = []       //so I had to make the API pull 3 times and put them all together
     var tempArr = []
     var qYTD1 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(143, 'days').format().substring(0, 10) + "&date_to=" + moment().format().substring(0, 10) + "&symbols=" + stock
     var qYTD2 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(289, 'days').format().substring(0, 10) + "&date_to=" + moment().subtract(143, 'days').format().substring(0, 10) + "&symbols=" + stock
@@ -137,11 +144,14 @@ function displayHighLow(stockHigh,stockLow) {
     stockLow.sort((a,b) => a-b)
     yearHigh = stockHigh[0]
     yearLow = stockLow[0]
+     yearHighs.textContent = '$' + yearHigh; //need variable for year high
+    yearLows.textContent = '$' + yearLow;
+
 }
 // CHART .JS ///
 
 // DATA
-var stars = [135850, 52122]; //y-axis VALUES. need a function to pull Q1 2020 stock high
+var stars = [0, 0]; //y-axis VALUES. need a function to pull Q1 2020 stock high
 var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
 
 //creating the BAR chart.
@@ -209,13 +219,23 @@ function q1High() {
     compChart.data.labels = ['Q1 2020 High on ' + highDate, 'Today'];
 
     compChart.update();
+    updateInfo();
 }
+
+
+
+$(document).ready(function () {
+    pullData('AAPL')
+    pullNData('AAPL')
+    pullHData('AAPL')
+    pullYTDData('AAPL')
+})
 
 function getHistory () {
 
     form.submit (function() {
     var search = tArea.value
-    pullNData (search);
+    pullData (search);
     pullHData (search);
     searchHistory.push(search);
     searchHistory();
@@ -229,11 +249,40 @@ function searchHistory () {
         history.setAttribute("type",text)
         history.setAttribute("value", searchHistory[i] )
         history.addEventListener("click",function() {  
-            pullNData(history.value);
-            pullHData(history.value);
+
         })
         watchlist.append(history);
     }
 
 }
 
+function updateInfo() {
+q1ATH.textContent = '$' + highValue;
+cPrice.textContent = '$' + currentClose;
+ // need var for year low
+ volume = cData.data[0].volume;
+ abbreviateNumber(volume);
+vol.textContent = volume + ' shares traded today'
+compName = nData.data[0].name;
+cName.textContent = compName;
+compSymbol = nData.data[0].symbol;
+stockTag.textContent = compSymbol;
+}
+
+function abbreviateNumber(value) {
+    var newValue = value;
+    if (value >= 1000) {
+        var suffixes = ["", "k", "m", "b","t"];
+        var suffixNum = Math.floor( (""+value).length/3 );
+        var shortValue = '';
+        for (var precision = 2; precision >= 1; precision--) {
+            shortValue = parseFloat( (suffixNum != 0 ? (value / Math.pow(1000,suffixNum) ) : value).toPrecision(precision));
+            var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
+            if (dotLessShortValue.length <= 2) { break; }
+        }
+        if (shortValue % 1 != 0)  shortValue = shortValue.toFixed(1);
+        newValue = shortValue+suffixes[suffixNum];
+    }
+    volume = newValue;
+    return newValue;
+}
