@@ -1,5 +1,4 @@
 var MSAPIKey = '71dcc5160836657f52acf194332c63da'
-var today
 var cName
 var cData = []
 var histData = []
@@ -29,7 +28,7 @@ function dataSpy(event) {
     pullData(tArea.val())
     pullNData(tArea.val())
     pullHData(tArea.val())
-    //pullYTDData is nested in pullData because we need today's date to work with
+    //pullYTDData(tArea.val())
 }
 
 function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
@@ -41,10 +40,8 @@ function pullData(stock) {//This first pull gets current daily market info, not 
         return res.json()
     })
     .then(function (data) {
-        console.log(data)
         cData = data
-        today = data.data[0].date
-        pullYTDData(today,stock)
+        console.log(data)
         localStorage.setItem('cData',JSON.stringify(data))
     })
 }
@@ -73,26 +70,59 @@ function pullHData(stock) { //This APi pull gets the historical data from Jan 01
         return res.json()
     })
     .then(function (data) {
-        console.log(data)
         histData = data
+        console.log(data)
         localStorage.setItem('hData',JSON.stringify(data))
         q1High();
     })
 }
 
-function pullYTDData(today,stock) {//This API pull gets the 52 week high and low
-    // this is only returning 100 days of data, we'll have to TODO: find the 52weekhigh and 52weeklow from MarketStack
-    var qDates = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + (today.substring(0,4)-1) + today.substring(4,10) + "&date_to=" + today.substring(0,10) + "&symbols=" + stock
-    fetch(qDates,{
+function pullYTDData(stock) {//This API pull gets the 52 week high and low
+    var stockHigh = []
+    var stockLow = []
+    var tempArr = []
+    var qYTD1 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(143,'days').format().substring(0,10) + "&date_to=" + moment().format().substring(0,10) + "&symbols=" + stock
+    var qYTD2 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(289,'days').format().substring(0,10) + "&date_to=" + moment().subtract(143,'days').format().substring(0,10) + "&symbols=" + stock
+    var qYTD3 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(365,'days').format().substring(0,10) + "&date_to=" + moment().subtract(289,'days').format().substring(0,10) + "&symbols=" + stock
+    fetch(qYTD1,{
         cache: 'reload',
     })
     .then(function (res) {
         return res.json()
     })
     .then(function (data) {
-        console.log(data)
-        localStorage.setItem('ytdData',JSON.stringify(data))
+        var dataOne = data.data
+        console.log(tempArr)
+        fetch(qYTD2,{
+            cache: 'reload',
+        })
+        .then(function (res) {
+            return res.json()
+        })
+        .then(function (data) {
+            var dataTwo = $.merge(dataOne,data.data)
+            console.log(dataTwo)
+            fetch(qYTD3,{
+                cache: 'reload',
+            })
+            .then(function (res) {
+                return res.json()
+            })
+            .then(function (data) {
+                var dataThree = data.data
+                tempArr = $.merge(dataTwo,dataThree)
+                console.log(tempArr)
+                tempArr.forEach(function getHigh(i){
+                    tempArr[i].high = stockHigh[i]
+                    tempArr[i].low = stockLow[i]
+                    console.log(stockHigh[i])
+                    console.log(stockLow[i])
+                })
+                
+            })
+        })
     })
+    console.log(tempArr)
 }
 // CHART .JS ///
 
