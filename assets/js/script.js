@@ -6,27 +6,21 @@ var nData = []
 var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
-<<<<<<< HEAD
-=======
 var stockTag = document.getElementById('tickerSymbol')
 var stockHigh = []
->>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
 var yearHigh
 var yearLow
 form.submit(dataSpy)
 var defaultTick = 'SPY'
-<<<<<<< HEAD
-var searchHistory = []
-var watchlist = $('#history')
-=======
 var q1ATH = document.getElementById("Q12020")
 var cPrice = document.getElementById('currentPrice')
 var yearHighs = document.getElementById('allTH')
 var yearLows = document.getElementById('allTL')
 var vol = document.getElementById('volume')
+var searchHistoryArray= []
+var watchlist = $('#history')
 
 
->>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
 //TODO: issue 26
 //These are all the ids on the HTML page to link the information to
 //(<span id="tickerSymbol">APPL</span>)
@@ -238,43 +232,20 @@ $(document).ready(function () {
 
 })
 
-function getHistory () {
 
-    form.submit (function() {
-    var search = tArea.value
-    pullData (search);
-    pullHData (search);
-    searchHistory.push(search);
-    searchHistory();
-})
-}
 
-<<<<<<< HEAD
-function searchHistory() {
-    console.log("hey")
-    watchlist.append(tArea.val())
-    console.log(watchlist)
-=======
 function searchHistory () {
     watchlist.innerHTML = "";
->>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
-    for ( var i=0; i <searchHistory.length; i++ ) {
-        var history = document.createElement("input");
+    for (i=0; i <searchHistory.length; i++ ) {
+        var history = document.createElement("p");
         history.setAttribute("type",text)
-        history.setAttribute("value", searchHistory[i] )
+        history.setAttribute("value", searchHistoryArray[i] )
         history.addEventListener("click",function() {  
-<<<<<<< HEAD
-            pullNData(history.value);
-=======
             pullData(history.value);
->>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
             pullHData(history.value);
         })
         watchlist.append(history);
     }
-<<<<<<< HEAD
-
-=======
 
 }
 
@@ -307,5 +278,4 @@ function abbreviateNumber(value) {
     }
     volume = newValue;
     return newValue;
->>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
 }
