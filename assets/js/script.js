@@ -12,6 +12,8 @@ var stockLow = []
 var yearLow
 form.submit(dataSpy)
 var defaultTick = 'SPY'
+var searchHistory = []
+var watchlist = $('#history')
 
 //TODO: issue 26
 //These are all the ids on the HTML page to link the information to
@@ -78,7 +80,7 @@ function pullHData(stock) { //This APi pull gets the historical data from Jan 01
             histData = data
             console.log(data)
             localStorage.setItem('hData', JSON.stringify(data))
-            //q1High();
+            q1High();
         })
 }
 
@@ -131,7 +133,7 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
 
 function displayHighLow(stockHigh,stockLow) {
     stockHigh.sort((a,b) => b-a)
-    stockLow.sort((a,b) => b-a)
+    stockLow.sort((a,b) => a-b)
     yearHigh = stockHigh[0]
     yearLow = stockLow[0]
 }
@@ -140,7 +142,6 @@ function displayHighLow(stockHigh,stockLow) {
 // DATA
 var stars = [135850, 52122]; //y-axis VALUES. need a function to pull Q1 2020 stock high
 var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
-
 
 //creating the BAR chart.
 if (this.compChart) this.compChart.destroy();
@@ -209,11 +210,29 @@ function q1High() {
     compChart.update();
 }
 
-// function initialGraph(){
-//     pullData('AAPL')
-//     pullNData('AAPL')
-//     pullHData('AAPL')
-// }
+function getHistory () {
 
-//initialGraph();
+    form.submit (function() {
+    var search = tArea.value
+    pullNData (search);
+    pullHData (search);
+    searchHistory.push(search);
+    searchHistory();
+})
+}
+
+function searchHistory () {
+    watchlist.innerHTML = "";
+    for ( var i=0; i <searchHistory.length; i++ ) {
+        var history = document.createElement("input");
+        history.setAttribute("type",text)
+        history.setAttribute("value", searchHistory[i] )
+        history.addEventListener("click",function() {  
+            pullNData(history.value);
+            pullHData(history.value);
+        })
+        watchlist.append(history);
+    }
+
+}
 
