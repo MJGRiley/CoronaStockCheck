@@ -12,6 +12,8 @@ var yearHigh
 var yearLow
 form.submit(dataSpy)
 var defaultTick = 'SPY'
+var searchHistoryArray = []
+var watchlist = $('#history')
 var q1ATH = document.getElementById("Q12020")
 var cPrice = document.getElementById('currentPrice')
 var yearHighs = document.getElementById('allTH')
@@ -38,15 +40,14 @@ function dataSpy(event) {
     event.preventDefault()
     // need something here to detect and return out of this function if user has input something other than a stock ticker eg: number, string, more?
     // also a modal pop up to alert the user TODO: issue #34
-    pullData(tArea.val())
-    pullNData(tArea.val())
-    pullHData(tArea.val())
-    pullYTDData(tArea.val())
-    console.log(typeof(searchHistory))
-    searchHistory()
+    pullData(tArea.val().toUpperCase())
+    pullNData(tArea.val().toUpperCase())
+    pullHData(tArea.val().toUpperCase())
+    pullYTDData(tArea.val().toUpperCase())
+    searchHistory(tArea.val().toUpperCase())
 }
 
-function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
+function pullData(stock) {//This first pull gets latest daily market info from end of day endpoint
     var qCurrent = "http://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&symbols=" + stock
     fetch(qCurrent, {
         cache: 'reload',
@@ -61,7 +62,7 @@ function pullData(stock) {//This first pull gets current daily market info, not 
         })
 }
 
-function pullNData(stock) {//This API pull gets the company name data 
+function pullNData(stock) {//This API pull gets the company name data from the tickers endpoint
     var qNData = "https://api.marketstack.com/v1/tickers?access_key=" + MSAPIKey + "&symbols=" + stock
     fetch(qNData, {
         cache: 'reload',
@@ -93,8 +94,8 @@ function pullHData(stock) { //This APi pull gets the historical data from Jan 01
 }
 
 function pullYTDData(stock) {//This API pull gets the 52 week high and low
-    var stockHigh = []
-    var stockLow = []
+    var stockHigh = []      //the API only delivers 100 items in the object
+    var stockLow = []       //so I had to make the API pull 3 times and put them all together
     var tempArr = []
     var qYTD1 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(143, 'days').format().substring(0, 10) + "&date_to=" + moment().format().substring(0, 10) + "&symbols=" + stock
     var qYTD2 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(289, 'days').format().substring(0, 10) + "&date_to=" + moment().subtract(143, 'days').format().substring(0, 10) + "&symbols=" + stock
@@ -229,25 +230,27 @@ $(document).ready(function () {
     pullNData('AAPL')
     pullHData('AAPL')
     pullYTDData('AAPL')
-
+    searchHistory('AAPL')
 })
 
 
-
-function searchHistory () {
-    watchlist.innerHTML = "";
-    for (i=0; i <searchHistory.length; i++ ) {
-        var history = document.createElement("p");
-        history.setAttribute("type",text)
-        history.setAttribute("value", searchHistoryArray[i] )
-        history.addEventListener("click",function() {  
-            pullData(history.value);
-            pullHData(history.value);
-        })
-        watchlist.append(history);
-    }
-
+function searchHistory (stock) {
+    if (searchHistoryArray.includes(stock)){return}
+    searchHistoryArray.push(stock)
+    console.log(searchHistoryArray)
+    var history = document.createElement("p");
+    history.append(stock)
+    history.setAttribute("class","watchListChild")
+    $('#history').append(history)
 }
+
+$(document).on('click',".watchListChild",function() {
+    console.log($(this).text())
+    pullData($(this).text())
+    pullNData($(this).text());
+    pullHData($(this).text());
+})
+
 
 function updateInfo() {
 q1ATH.textContent = '$' + highValue;
