@@ -6,9 +6,7 @@ var nData = []
 var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
-var stockHigh = []
 var yearHigh
-var stockLow = []
 var yearLow
 form.submit(dataSpy)
 var defaultTick = 'SPY'
@@ -31,11 +29,12 @@ function dataSpy(event) {
     event.preventDefault()
     // need something here to detect and return out of this function if user has input something other than a stock ticker eg: number, string, more?
     // also a modal pop up to alert the user TODO: issue #34
-    //pullData(tArea.val())
-    //pullNData(tArea.val())
-    //pullHData(tArea.val())
-    //pullYTDData(tArea.val())
-    //searchHistory()
+    pullData(tArea.val())
+    pullNData(tArea.val())
+    pullHData(tArea.val())
+    pullYTDData(tArea.val())
+    console.log(typeof(searchHistory))
+    searchHistory()
 }
 
 function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
@@ -62,7 +61,7 @@ function pullNData(stock) {//This API pull gets the company name data
             return res.json()
         })
         .then(function (data) {
-            nData = data
+            cName = data
             console.log(data)
             localStorage.setItem('nData', JSON.stringify(data))
         })
@@ -210,9 +209,10 @@ function q1High() {
     compChart.update();
 }
 
-
-function searchHistory () {
-    watchlist.innerHTML = "soemthing";
+function searchHistory() {
+    console.log("hey")
+    watchlist.append(tArea.val())
+    console.log(watchlist)
     for ( var i=0; i <searchHistory.length; i++ ) {
         var history = document.createElement("input");
         history.setAttribute("type",text)
