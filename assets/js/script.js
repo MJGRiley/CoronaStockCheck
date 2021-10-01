@@ -6,10 +6,14 @@ var nData = []
 var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
+var stockHigh = []
+var yearHigh
+var stockLow = []
+var yearLow
 form.submit(dataSpy)
 var defaultTick = 'SPY'
-
-
+var searchHistory = []
+var watchlist = $('#history')
 //TODO: issue 26
 //These are all the ids on the HTML page to link the information to
 //(<span id="tickerSymbol">APPL</span>)
@@ -27,10 +31,11 @@ function dataSpy(event) {
     event.preventDefault()
     // need something here to detect and return out of this function if user has input something other than a stock ticker eg: number, string, more?
     // also a modal pop up to alert the user TODO: issue #34
-    pullData(tArea.val())
-    pullNData(tArea.val())
-    pullHData(tArea.val())
+    //pullData(tArea.val())
+    //pullNData(tArea.val())
+    //pullHData(tArea.val())
     //pullYTDData(tArea.val())
+    //searchHistory()
 }
 
 function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
@@ -115,22 +120,28 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
                     console.log(tempArr)
                     console.log(tempArr.length)
                     for (i=0;i<tempArr.length;i++) {
-                        stockHigh[i] = tempArr[i].high
-                        stockLow[i] = tempArr[i].low
-                        //displayHighLow()
+                        stockHigh.push(tempArr[i].high)
+                        stockLow.push(tempArr[i].low)
                     }
+                    console.log(stockHigh)
+                    console.log(stockLow)
+                    displayHighLow (stockHigh,stockLow)
                 })
             })
     })
 }
 
-
+function displayHighLow(stockHigh,stockLow) {
+    stockHigh.sort((a,b) => b-a)
+    stockLow.sort((a,b) => a-b)
+    yearHigh = stockHigh[0]
+    yearLow = stockLow[0]
+}
 // CHART .JS ///
 
 // DATA
 var stars = [135850, 52122]; //y-axis VALUES. need a function to pull Q1 2020 stock high
 var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
-
 
 //creating the BAR chart.
 if (this.compChart) this.compChart.destroy();
@@ -187,9 +198,9 @@ function q1High() {
     highDate = histDates[highIndex];
     const dateFix = highDate.split("T");
     highDate = dateFix[0]
-    console.log('The price high is $' + highValue + ' on ' + highDate)
+    //console.log('The price high is $' + highValue + ' on ' + highDate)
     currentClose = cData.data[0].close
-    console.log(currentClose)
+    //console.log(currentClose)
 
     stars = [highValue, currentClose]; //updates Q1 high graph vs current price when ticker is entered. 
 
@@ -200,27 +211,8 @@ function q1High() {
 }
 
 
-
-$(document).ready(function () {
-    pullData('AAPL')
-    pullNData('AAPL')
-    pullHData('AAPL')
-    
-})
-
-function getHistory () {
-
-    form.submit (function() {
-    var search = tArea.value
-    pullNData (search);
-    pullHData (search);
-    searchHistory.push(search);
-    searchHistory();
-})
-}
-
 function searchHistory () {
-    watchlist.innerHTML = "";
+    watchlist.innerHTML = "soemthing";
     for ( var i=0; i <searchHistory.length; i++ ) {
         var history = document.createElement("input");
         history.setAttribute("type",text)
