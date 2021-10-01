@@ -1,17 +1,24 @@
 var MSAPIKey = '71dcc5160836657f52acf194332c63da'
-var cName
+var cName = document.getElementById('companyName')
 var cData = []
 var histData = []
 var nData = []
 var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
+var stockTag = document.getElementById('tickerSymbol')
 var stockHigh = []
 var yearHigh
 var stockLow = []
 var yearLow
 form.submit(dataSpy)
 var defaultTick = 'SPY'
+var q1ATH = document.getElementById("Q12020")
+var cPrice = document.getElementById('currentPrice')
+var yearHighs = document.getElementById('allTH')
+var yearLows = document.getElementById('allTL')
+var vol = document.getElementById('volume')
+
 
 //TODO: issue 26
 //These are all the ids on the HTML page to link the information to
@@ -78,7 +85,7 @@ function pullHData(stock) { //This APi pull gets the historical data from Jan 01
             histData = data
             console.log(data)
             localStorage.setItem('hData', JSON.stringify(data))
-            //q1High();
+            q1High();
         })
 }
 
@@ -131,14 +138,17 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
 
 function displayHighLow(stockHigh,stockLow) {
     stockHigh.sort((a,b) => b-a)
-    stockLow.sort((a,b) => b-a)
+    stockLow.sort((a,b) => a-b)
     yearHigh = stockHigh[0]
     yearLow = stockLow[0]
+     yearHighs.textContent = '$' + yearHigh; //need variable for year high
+    yearLows.textContent = '$' + yearLow;
+
 }
 // CHART .JS ///
 
 // DATA
-var stars = [135850, 52122]; //y-axis VALUES. need a function to pull Q1 2020 stock high
+var stars = [0, 0]; //y-axis VALUES. need a function to pull Q1 2020 stock high
 var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
 
 
@@ -207,13 +217,72 @@ function q1High() {
     compChart.data.labels = ['Q1 2020 High on ' + highDate, 'Today'];
 
     compChart.update();
+    updateInfo();
 }
 
-// function initialGraph(){
-//     pullData('AAPL')
-//     pullNData('AAPL')
-//     pullHData('AAPL')
-// }
 
-//initialGraph();
 
+$(document).ready(function () {
+    pullData('AAPL')
+    pullNData('AAPL')
+    pullHData('AAPL')
+    pullYTDData('AAPL')
+
+})
+
+function getHistory () {
+
+    form.submit (function() {
+    var search = tArea.value
+    pullData (search);
+    pullHData (search);
+    searchHistory.push(search);
+    searchHistory();
+})
+}
+
+function searchHistory () {
+    watchlist.innerHTML = "";
+    for ( var i=0; i <searchHistory.length; i++ ) {
+        var history = document.createElement("input");
+        history.setAttribute("type",text)
+        history.setAttribute("value", searchHistory[i] )
+        history.addEventListener("click",function() {  
+            pullData(history.value);
+            pullHData(history.value);
+        })
+        watchlist.append(history);
+    }
+
+}
+
+function updateInfo() {
+q1ATH.textContent = '$' + highValue;
+cPrice.textContent = '$' + currentClose;
+ // need var for year low
+ volume = cData.data[0].volume;
+ abbreviateNumber(volume);
+vol.textContent = volume + ' shares traded today'
+compName = nData.data[0].name;
+cName.textContent = compName;
+compSymbol = nData.data[0].symbol;
+stockTag.textContent = compSymbol;
+}
+
+function abbreviateNumber(value) {
+    var newValue = value;
+    if (value >= 1000) {
+        var suffixes = ["", "k", "m", "b","t"];
+        var suffixNum = Math.floor( (""+value).length/3 );
+        var shortValue = '';
+        for (var precision = 2; precision >= 1; precision--) {
+            shortValue = parseFloat( (suffixNum != 0 ? (value / Math.pow(1000,suffixNum) ) : value).toPrecision(precision));
+            var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
+            if (dotLessShortValue.length <= 2) { break; }
+        }
+        if (shortValue % 1 != 0)  shortValue = shortValue.toFixed(1);
+        newValue = shortValue+suffixes[suffixNum];
+    }
+    volume = newValue;
+    return newValue;
+}
