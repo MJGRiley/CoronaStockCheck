@@ -6,10 +6,6 @@ var nData = []
 var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
-var histData
-var submitbtn = $('#submitbtn')
-var searchHistory = [];
-var watchlist = $('#watchlistresults')
 form.submit(dataSpy)
 var defaultTick = 'SPY'
 
@@ -170,56 +166,6 @@ chart.style.backgroundColor = 'rgba(0,0,0,0.0)'; //chart background color TODO: 
 //import data into compChart
 //"tickerSearch" is input ID
 
-<<<<<<< HEAD
-function q1High () {
-    //var keys = Object.keys(hData)
-    // create array of all closes
-    var histDataArr =[];
-    var histDates = [];
-    for (i =0; i < 63 ; i++){
-        histDataArr[i] = histData.data[i].close
-        histDates[i] = histData.data[i].date
-    }
-    let high = histDataArr.indexOf(Math.max(...histDataArr));
-
-
-}
-
-
-// Watchlist Function
-//Pulling History from local storage if there is any
-function getHistory () {
-    form.submit (function() {
-        var search = tArea.value
-        pullData (search);
-        pullHData (search);
-        //Do not allow duplicates into watchlist
-        if (searchHistory.includes(search)){
-            return
-        }
-        searchHistory.push(search);
-        searchHistory();
-    })
-    return "something";
-}
-
-function searchHistory () {
-    console.log(watchlist.innerHTML) 
-    watchlist.innerHTML= "";
-    for ( var i=0; i <searchHistory.length; i++ ) {
-        var history = document.createElement("input");
-        history.setAttribute("type",text)
-        history.setAttribute("value", searchHistory[i] )
-        history.addEventListener("click",function() {  
-            pullData(history.value);
-            pullHData(history.value);
-        })
-        watchlist.append(history);
-    
-    }
-}
-console.log(getHistory())
-=======
 function q1High() {
     var histDataArr = []
     var histDates = [];
@@ -252,4 +198,3 @@ function initialGraph(){
 }
 
 initialGraph();
->>>>>>> 1d68231d9d305ff3290b46fdac8ab3bbb358fac6

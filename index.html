@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Corona Stock Check</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-  <link rel="stylesheet" href="./assets/css/style.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Corona Stock Check</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
 <body>
-  <!--Included Header and description-->
-  <header class="jumbotron jumbotron-fluid custom-jumbotron">
-    <div class="container text-center">
-      <h1>Coronavirus Crash, Have Stocks Recovered?</h1>
-      <p>The long lasting impact of the Feb. 2020 Stock Market crash is still visible in the US Stock Exchange.
-        Our goal is to allow users to compare the Q1 2020 all time high of an individual stock to the current
-        price to evaluate whether they should buy in or not. </p>
-    </div>
-  </header>
-  <form id="tickerForm">
-    <input id="tickerSearch" type="text" placeholder="Please Input a Ticker Here">
-    <button id ="submitbtn" type='submit'>Submit</button>
-  </form>
+    <!--Included Header and description-->
+    <header class="jumbotron jumbotron-fluid custom-jumbotron">
+        <div class="container text-center">
+            <h1>Coronavirus Crash, Have Stocks Recovered?</h1>
+            <p>The long lasting impact of the Feb. 2020 Stock Market crash is still visible in the US Stock Exchange.
+                Our goal is to allow users to compare the Q1 2020 all time high of an individual stock to the current
+                price to evaluate whether they should buy in or not. </p>
+        </div>
+    </header>
+    <form id="tickerForm">
+      <input id="tickerSearch" type="text" placeholder="Please Input a Ticker Here">
+      <button type='submit'>Submit</button>
+    </form>
 
-  <!--Container that will display ticker search data-->
-  <div class="row">
+    <!--Container that will display ticker search data-->
+    <div class="row">
     <div class="card text-center col-sm-8">
         <div class="card-body">
             <h5 class="ticker-output">Card title: Ticker Symbol (<span id="tickerSymbol">APPL</span>)</h5>
@@ -67,40 +66,21 @@
                   </div>
                   <canvas id="compChart" width="800" height="600" ></canvas>
 
+              </div>        
         </div>
-      </div>
     </div>
     <div class="card text-center col-sm-4">
-      <div id ="appendHere" class="card-body">
-        <h5 class="watchlist">Watchlist</h5>
-        <form id = "watchlistresults" class="watchlistitems">
-          <!--Use JS to append <li> of watchlist-->
-            <p>AAPL</p>
-            <p>AAPL</p>
-            <p>AAPL</p>
-        </form>
-      </div>
+        <div class="card-body">
+            <h5 class="watchlist">Watchlist</h5>
+            <ul class="watchlistitems">
+            <!--Use JS to append <li> of watchlist-->
+            </ul>
+        </div>
     </div>
-  </div>
+</div>
 
 
 
-<<<<<<< HEAD
-
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
-
-  <script src="./assets/js/script.js" async defer></script>
-=======
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -115,7 +95,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
     <script src="./assets/js/chartjs-plugin-datalabels.min.js"></script>
     <script src="./assets/js/script.js" async defer></script>
->>>>>>> 1d68231d9d305ff3290b46fdac8ab3bbb358fac6
 
 
 </html>
