@@ -201,9 +201,13 @@ function q1High() {
 }
 
 function initialGraph(){
-    pullData('SPY')
-    pullNData('SPY')
-    pullHData('SPY')
+    
 }
 
 initialGraph();
+
+$(document).ready(function () {
+    pullData('AAPL')
+    pullNData('AAPL')
+    pullHData('AAPL')
+})
