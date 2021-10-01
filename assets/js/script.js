@@ -173,7 +173,7 @@ chart.style.backgroundColor = 'rgba(0,0,0,0.0)'; //chart background color TODO: 
 
 //pull most recent stock close from API for other bar. most recent instead of today because user may use this app on a fed holiday or weekend
 //import data into compChart
-//"tickersearch" is input ID
+//"tickerSearch" is input ID
 
 function q1High() {
     var histDataArr = []
