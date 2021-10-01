@@ -19,6 +19,9 @@ var cPrice = document.getElementById('currentPrice')
 var yearHighs = document.getElementById('allTH')
 var yearLows = document.getElementById('allTL')
 var vol = document.getElementById('volume')
+var dataOne
+var dollarChange;
+var perChange;
 
 
 //TODO: issue 26
@@ -106,6 +109,8 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
         })
         .then(function (data) {
             var dataOne = data.data
+            secondToLastClose = data.data[1].close 
+            console.log(secondToLastClose)
             fetch(qYTD2, {
                 cache: 'reload',
             })
@@ -253,7 +258,6 @@ $(document).on('click',".watchListChild",function() {
 function updateInfo() {
 q1ATH.textContent = '$' + highValue;
 cPrice.textContent = '$' + currentClose;
- // need var for year low
  volume = cData.data[0].volume;
  abbreviateNumber(volume);
 vol.textContent = volume + ' shares traded today'
@@ -261,6 +265,7 @@ compName = nData.data[0].name;
 cName.textContent = compName;
 compSymbol = nData.data[0].symbol;
 stockTag.textContent = compSymbol;
+priceChanges();
 }
 
 function abbreviateNumber(value) {
@@ -279,4 +284,16 @@ function abbreviateNumber(value) {
     }
     volume = newValue;
     return newValue;
+}
+
+
+
+function priceChanges(){
+    perChange = (currentClose - secondToLastClose)/(secondToLastClose) * 100
+    perChange = perChange.toFixed(2) + '%';
+    console.log(perChange);
+    dollarChange = currentClose - secondToLastClose;
+    dollarChange = '$' + dollarChange.toFixed(2);
+    console.log(dollarChange);
+    
 }
