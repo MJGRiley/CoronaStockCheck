@@ -200,14 +200,11 @@ function q1High() {
     compChart.update();
 }
 
-function initialGraph(){
-    
-}
 
-initialGraph();
 
 $(document).ready(function () {
     pullData('AAPL')
     pullNData('AAPL')
     pullHData('AAPL')
+    
 })
