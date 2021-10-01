@@ -6,9 +6,12 @@ var nData = []
 var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
+var stockHigh = []
+var yearHigh
+var stockLow = []
+var yearLow
 form.submit(dataSpy)
 var defaultTick = 'SPY'
-
 
 //TODO: issue 26
 //These are all the ids on the HTML page to link the information to
@@ -75,7 +78,7 @@ function pullHData(stock) { //This APi pull gets the historical data from Jan 01
             histData = data
             console.log(data)
             localStorage.setItem('hData', JSON.stringify(data))
-            q1High();
+            //q1High();
         })
 }
 
@@ -94,7 +97,6 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
         })
         .then(function (data) {
             var dataOne = data.data
-            console.log(tempArr)
             fetch(qYTD2, {
                 cache: 'reload',
             })
@@ -102,20 +104,36 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
                 return res.json()
             })
             .then(function (data) {
-                var dataThree = data.data
-                tempArr = $.merge(dataTwo,dataThree)
-                console.log(tempArr)
-                for(i=0;i<tempArr.length;i++){
-                    console.log(typeof(tempArr))
-                    console.log(i)
-                    stockHigh[i] = tempArr[i].high
-                    stockLow[i] = tempArr[i].low
+                var dataTwo = $.merge(dataOne, data.data)
+                console.log(dataTwo)
+                fetch(qYTD3, {
+                    cache: 'reload',
+                })
+                .then(function (res) {
+                    return res.json()
+                })
+                .then(function (data) {
+                    var dataThree = data.data
+                    tempArr = $.merge(dataTwo, dataThree)
+                    console.log(tempArr)
+                    console.log(tempArr.length)
+                    for (i=0;i<tempArr.length;i++) {
+                        stockHigh.push(tempArr[i].high)
+                        stockLow.push(tempArr[i].low)
+                    }
                     console.log(stockHigh)
                     console.log(stockLow)
-                }
+                    displayHighLow (stockHigh,stockLow)
+                })
             })
-        })
     })
+}
+
+function displayHighLow(stockHigh,stockLow) {
+    stockHigh.sort((a,b) => b-a)
+    stockLow.sort((a,b) => b-a)
+    yearHigh = stockHigh[0]
+    yearLow = stockLow[0]
 }
 // CHART .JS ///
 
@@ -179,9 +197,9 @@ function q1High() {
     highDate = histDates[highIndex];
     const dateFix = highDate.split("T");
     highDate = dateFix[0]
-    console.log('The price high is $' + highValue + ' on ' + highDate)
+    //console.log('The price high is $' + highValue + ' on ' + highDate)
     currentClose = cData.data[0].close
-    console.log(currentClose)
+    //console.log(currentClose)
 
     stars = [highValue, currentClose]; //updates Q1 high graph vs current price when ticker is entered. 
 
@@ -191,10 +209,11 @@ function q1High() {
     compChart.update();
 }
 
-function initialGraph(){
-    pullData('SPY')
-    pullNData('SPY')
-    pullHData('SPY')
-}
+// function initialGraph(){
+//     pullData('AAPL')
+//     pullNData('AAPL')
+//     pullHData('AAPL')
+// }
 
-initialGraph();
+//initialGraph();
+
