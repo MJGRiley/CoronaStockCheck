@@ -6,13 +6,19 @@ var nData = []
 var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
+<<<<<<< HEAD
+=======
 var stockTag = document.getElementById('tickerSymbol')
 var stockHigh = []
+>>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
 var yearHigh
-var stockLow = []
 var yearLow
 form.submit(dataSpy)
 var defaultTick = 'SPY'
+<<<<<<< HEAD
+var searchHistory = []
+var watchlist = $('#history')
+=======
 var q1ATH = document.getElementById("Q12020")
 var cPrice = document.getElementById('currentPrice')
 var yearHighs = document.getElementById('allTH')
@@ -20,6 +26,7 @@ var yearLows = document.getElementById('allTL')
 var vol = document.getElementById('volume')
 
 
+>>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
 //TODO: issue 26
 //These are all the ids on the HTML page to link the information to
 //(<span id="tickerSymbol">APPL</span>)
@@ -41,6 +48,8 @@ function dataSpy(event) {
     pullNData(tArea.val())
     pullHData(tArea.val())
     pullYTDData(tArea.val())
+    console.log(typeof(searchHistory))
+    searchHistory()
 }
 
 function pullData(stock) {//This first pull gets current daily market info, not real time data also sets the date and calls YTD Data 
@@ -67,7 +76,7 @@ function pullNData(stock) {//This API pull gets the company name data
             return res.json()
         })
         .then(function (data) {
-            nData = data
+            cName = data
             console.log(data)
             localStorage.setItem('nData', JSON.stringify(data))
         })
@@ -150,7 +159,6 @@ function displayHighLow(stockHigh,stockLow) {
 // DATA
 var stars = [0, 0]; //y-axis VALUES. need a function to pull Q1 2020 stock high
 var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
-
 
 //creating the BAR chart.
 if (this.compChart) this.compChart.destroy();
@@ -241,18 +249,32 @@ function getHistory () {
 })
 }
 
+<<<<<<< HEAD
+function searchHistory() {
+    console.log("hey")
+    watchlist.append(tArea.val())
+    console.log(watchlist)
+=======
 function searchHistory () {
     watchlist.innerHTML = "";
+>>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
     for ( var i=0; i <searchHistory.length; i++ ) {
         var history = document.createElement("input");
         history.setAttribute("type",text)
         history.setAttribute("value", searchHistory[i] )
         history.addEventListener("click",function() {  
+<<<<<<< HEAD
+            pullNData(history.value);
+=======
             pullData(history.value);
+>>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
             pullHData(history.value);
         })
         watchlist.append(history);
     }
+<<<<<<< HEAD
+
+=======
 
 }
 
@@ -285,4 +307,5 @@ function abbreviateNumber(value) {
     }
     volume = newValue;
     return newValue;
+>>>>>>> 0f3985bd7dffebf2a10379c88dbf9cd0e7a042d8
 }
