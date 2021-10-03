@@ -1,20 +1,89 @@
+<<<<<<< HEAD
 .popOut {
     position: absolute;
     top: 5px;
     right: 10px;
 }
+=======
+>>>>>>> 039fe31add304428df2985fb1bf77fd44d2560d4
 
 body {
-    
+    background-color: rgb(244, 246, 250) !important;
+    margin: 0;
+    padding: 0;
+
+    }
+
+
+header {
+    background-color: rgb(42, 91, 165) !important;
+    color: white;
+    font-size: 15px;
+    margin: 0;
+    padding: 0px; 
+    padding left: 0px;
+
+    }
+      
+input#tickerSearch:nth-child(1) {
+    padding: 10px 
+    padding bottom: 20px
 }
+
+button:nth-child(2) {
+    background-color: rgb(192, 214, 243);
+    border-style: double;
+    border-color: steelblue;
+}
+
+h5 {
+    background-color:rgb(59, 75, 148);
+    color: white;
+    font-size: 15px;
+    margin: 0px
+}
+
+div.card-body {
+background-color: rgb(228, 202, 173) !important;
+
+}
+button.popOut:nth-child(1) {
+    background-color: rgb(192, 214, 243);
+    border-style: double;
+    border-color: steelblue;
+}
+
+li:nth-child(1) {
+    background-color: olivedrab;
+    color:rgb(244, 246, 250)
+}
+
+li:nth-child(2) {
+    background-color: red;
+    color:rgb(244, 246, 250)
+}
+
+li:nth-child(3) {
+    background-color: rosybrown;
+    color:rgb(244, 246, 250)
+
+}
+
+canvas#compChart:nth-child(4) {
+    background-color: navajowhite;
+}
+    
+Q1-2020-High 
+
 
 #notabledata li {
     list-style-type: none;
 }
 
-#compChart{
+#compchart{
     color: black
 }
+<<<<<<< HEAD
 .watchListChild {
     border: 1px solid black;
 }
@@ -39,3 +108,6 @@ Check wireframe mockup:
     Same for the graph at the bottom.
 
 */
+=======
+
+>>>>>>> 039fe31add304428df2985fb1bf77fd44d2560d4
