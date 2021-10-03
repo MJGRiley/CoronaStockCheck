@@ -37,11 +37,16 @@ button.popOut:nth-child(1) {
     background-color: rgb(192, 214, 243);
     border-style: double;
     border-color: steelblue;
-
-
 }
+
+
+canvas#compChart:nth-child(4) {
+    background-color: navajowhite;
+
+    }
+
+
 
 #notabledata li {
     list-style-type: none;
 }
-
