@@ -1,5 +1,4 @@
 
-
 body {
     background-color: rgb(244, 246, 250) !important;
     margin: 0;
@@ -27,8 +26,8 @@ h5 {
     margin: 0px
 }
 
- p.  {
-    background-color: cadetblue !important;
+div.card-body {
+background-color: cadetblue !important;
 
 }
 
