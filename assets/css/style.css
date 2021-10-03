@@ -27,11 +27,14 @@ h5 {
 }
 
 div.card-body {
-background-color: cadetblue !important;
+background-color: rgb(228, 202, 173) !important;
+
+}
+button.popOut:nth-child(1) {
+    background-color: sandybrown;
 
 }
 
 #notabledata li {
     list-style-type: none;
 }
-
