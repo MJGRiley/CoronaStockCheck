@@ -24,6 +24,7 @@ var dollarChange;
 var perChange;
 var compName;
 var secondToLastClose;
+var clearWatchList = $('#clear')
 
 
 //TODO: issue 26
@@ -263,6 +264,13 @@ function searchHistory(stock) {
 
 $(document).on('click', ".watchListChild", function () {
     pullData($(this).text())
+})
+
+clearWatchList.on('click', function () {
+    localStorage.clear();
+    searchHistoryArray = []
+    history.clear()
+    searchHistory()
 })
 
 function updateInfo() {
