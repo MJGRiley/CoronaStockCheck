@@ -11,15 +11,17 @@ header {
     background-color: rgb(42, 91, 165) !important;
     color: white;
     font-size: 15px;
-    margin: 0;
-    padding: 0px; 
+    margin: 0px;
+    padding: 5px; 
     padding left: 0px;
 
     }
       
 input#tickerSearch:nth-child(1) {
-    padding: 10px 
-    padding bottom: 20px
+    padding: 10px;
+    padding bottom: 10px;
+    padding right: 10px;
+    padding left: 10px;
 }
 
 button:nth-child(2) {
@@ -31,12 +33,12 @@ button:nth-child(2) {
 h5 {
     background-color:rgb(59, 75, 148);
     color: white;
-    font-size: 15px;
+    font-size: 25px;
     margin: 0px
 }
 
 div.card-body {
-background-color: rgb(228, 202, 173) !important;
+background-color: grey !important;
 
 }
 button.popOut:nth-child(1) {
@@ -62,7 +64,7 @@ li:nth-child(3) {
 }
 
 canvas#compChart:nth-child(4) {
-    background-color: navajowhite;
+    background-color: rgb(240, 238, 235);
 }
     
 Q1-2020-High 
@@ -73,6 +75,6 @@ Q1-2020-High
 }
 
 #compchart{
-    color: black
-}
+    color: black;
 
+   }
