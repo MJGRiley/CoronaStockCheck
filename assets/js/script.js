@@ -228,7 +228,22 @@ function q1High() {
     updateInfo()
 }
 
-$(document).ready(function () {pullData('TSLA')})
+
+
+$(document).ready(function () {
+    pullNData('AAPL')
+    pullData('AAPL')
+    pullYTDData('AAPL')
+    pullHData('AAPL')
+    searchHistory('AAPL')
+})
+
+clearWatchList.on('click', function () {
+    localStorage.clear();
+    searchHistoryArray = []
+    history.clear()
+    searchHistory()
+})
 
 function searchHistory(stock) {//creates items on the Watch List
     if (searchHistoryArray.includes(stock)) { return }
