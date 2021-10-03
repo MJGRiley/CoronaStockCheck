@@ -24,6 +24,8 @@ var dollarChange;
 var perChange;
 var compName;
 var secondToLastClose;
+var clearWatchList = $('#clear')
+
 
 
 //TODO: issue 26
@@ -258,6 +260,12 @@ $(document).ready(function () {
     searchHistory('AAPL')
 })
 
+clearWatchList.on('click', function () {
+    localStorage.clear();
+    searchHistoryArray = []
+    history.clear()
+    searchHistory()
+})
 
 function searchHistory(stock) {
     if (searchHistoryArray.includes(stock)) { return }
