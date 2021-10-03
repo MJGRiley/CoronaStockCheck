@@ -20,6 +20,7 @@ var yearHighs = document.getElementById('allTH')
 var yearLows = document.getElementById('allTL')
 var vol = document.getElementById('volume')
 var dataOne
+var secondToLastClose
 var dollarChange;
 var perChange;
 
@@ -37,30 +38,34 @@ var perChange;
 //<li>Close: id="Close"<span></span></li>
 
 
-function dataSpy(event) {
+function dataSpy(event) {//This function prevents the tArea from clearing on submit and starts the first API pull
     event.preventDefault()
-    // need something here to detect and return out of this function if user has input something other than a stock ticker eg: number, string, more?
-    // also a modal pop up to alert the user TODO: issue #34
     pullData(tArea.val().toUpperCase())
-    pullNData(tArea.val().toUpperCase())
-    pullHData(tArea.val().toUpperCase())
-    pullYTDData(tArea.val().toUpperCase())
-    searchHistory(tArea.val().toUpperCase())
 }
 
-function pullData(stock) {//This first pull gets latest daily market info from end of day endpoint
+function pullData(stock) {//This first pull checks for an error and gets latest daily market info from end of day endpoint if no error
+    var error = false
     var qCurrent = "http://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&symbols=" + stock
     fetch(qCurrent, {
         cache: 'reload',
     })
-        .then(function (res) {
-            return res.json()
-        })
-        .then(function (data) {
-            cData = data
-            console.log(data)
-            localStorage.setItem('cData', JSON.stringify(data))
-        })
+    .then(function (res) {
+        if (res.ok==false) {error = true}
+        return res.json()
+    })
+    .then(function (data) {
+        if (error) {
+            errorModal(data)
+            return
+        }
+        pullNData(stock)
+        pullHData(stock)
+        pullYTDData(stock)
+        cData = data
+        console.log(cData)
+        searchHistory(stock)
+        localStorage.setItem('cData', JSON.stringify(data))
+    })
 }
 
 function pullNData(stock) {//This API pull gets the company name data from the tickers endpoint
@@ -68,17 +73,19 @@ function pullNData(stock) {//This API pull gets the company name data from the t
     fetch(qNData, {
         cache: 'reload',
     })
-        .then(function (res) {
-            return res.json()
-        })
-        .then(function (data) {
-            cName = data
-            console.log(data)
-            localStorage.setItem('nData', JSON.stringify(data))
+    .then(function (res) {
+        console.log(res)
+        return res.json()
+    })
+    .then(function (data) {
+        console.log(data)
+        nData = data
+        localStorage.setItem('nData', JSON.stringify(data))
         })
 }
 
 function pullHData(stock) { //This APi pull gets the historical data from Jan 01 2020 - Apr 01 2020
+    //This is the same endpoint as the first pull but with dates specified in the query URL
     var qHData = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=2020-01-01&date_to=2020-04-01&symbols=" + stock
     fetch(qHData, {
         cache: 'reload',
@@ -88,7 +95,6 @@ function pullHData(stock) { //This APi pull gets the historical data from Jan 01
         })
         .then(function (data) {
             histData = data
-            console.log(data)
             localStorage.setItem('hData', JSON.stringify(data))
             q1High();
         })
@@ -104,53 +110,55 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
     fetch(qYTD1, {
         cache: 'reload',
     })
+    .then(function (res) {
+        return res.json()
+    })
+    .then(function (data) {
+        var dataOne = data.data
+        secondToLastClose = data.data[1].close 
+        fetch(qYTD2, {
+            cache: 'reload',
+        })
         .then(function (res) {
             return res.json()
         })
         .then(function (data) {
-            var dataOne = data.data
-            secondToLastClose = data.data[1].close 
-            console.log(secondToLastClose)
-            fetch(qYTD2, {
+            var dataTwo = $.merge(dataOne, data.data)
+            fetch(qYTD3, {
                 cache: 'reload',
             })
             .then(function (res) {
                 return res.json()
             })
             .then(function (data) {
-                var dataTwo = $.merge(dataOne, data.data)
-                console.log(dataTwo)
-                fetch(qYTD3, {
-                    cache: 'reload',
-                })
-                .then(function (res) {
-                    return res.json()
-                })
-                .then(function (data) {
-                    var dataThree = data.data
-                    tempArr = $.merge(dataTwo, dataThree)
-                    console.log(tempArr)
-                    console.log(tempArr.length)
-                    for (i=0;i<tempArr.length;i++) {
-                        stockHigh.push(tempArr[i].high)
-                        stockLow.push(tempArr[i].low)
-                    }
-                    console.log(stockHigh)
-                    console.log(stockLow)
-                    displayHighLow (stockHigh,stockLow)
-                })
+                var dataThree = data.data
+                tempArr = $.merge(dataTwo, dataThree)
+                for (i=0;i<tempArr.length;i++) {
+                    stockHigh.push(tempArr[i].high)
+                    stockLow.push(tempArr[i].low)
+                }
+                displayHighLow (stockHigh,stockLow)
             })
+        })
     })
 }
 
-function displayHighLow(stockHigh,stockLow) {
-    stockHigh.sort((a,b) => b-a)
+function displayHighLow(stockHigh,stockLow) { //This function does the math for the YTD data and outputs the year High and Low
+    stockHigh.sort((a,b) => b-a) //Thanks to Paul for putting me right track with this sorting call
     stockLow.sort((a,b) => a-b)
     yearHigh = stockHigh[0]
     yearLow = stockLow[0]
-     yearHighs.textContent = '$' + yearHigh; //need variable for year high
+    yearHighs.textContent = '$' + yearHigh;
     yearLows.textContent = '$' + yearLow;
+}
 
+function errorModal(res) { //This displays a modal if something invalid is put in the search box
+    $('.modal-title').text("Invalid Entry")
+    $('.modal-body').children().text(res.error.message)
+    $('.btn-secondary').click( function() {
+        $('.modal').hide()
+    })
+    $('.modal').show()
 }
 // CHART .JS ///
 
@@ -207,40 +215,24 @@ function q1High() {
         histDataArr[i] = histData.data[i].close
         histDates[i] = histData.data[i].date
     }
-    //
     let highIndex = histDataArr.indexOf(Math.max(...histDataArr));
     highValue = histDataArr[highIndex];
     highDate = histDates[highIndex];
     const dateFix = highDate.split("T");
     highDate = dateFix[0]
-    //console.log('The price high is $' + highValue + ' on ' + highDate)
     currentClose = cData.data[0].close
-    //console.log(currentClose)
-
     stars = [highValue, currentClose]; //updates Q1 high graph vs current price when ticker is entered. 
-
     compChart.data.datasets[0].data = stars;
     compChart.data.labels = ['Q1 2020 High on ' + highDate, 'Today'];
-
     compChart.update();
     updateInfo();
 }
 
-
-
-$(document).ready(function () {
-    pullData('AAPL')
-    pullNData('AAPL')
-    pullHData('AAPL')
-    pullYTDData('AAPL')
-    searchHistory('AAPL')
-})
-
+$(document).ready(function () {pullData('TSLA')})
 
 function searchHistory (stock) {
     if (searchHistoryArray.includes(stock)){return}
     searchHistoryArray.push(stock)
-    console.log(searchHistoryArray)
     var history = document.createElement("p");
     var secondHistory= document.createElement("p");
     history.append(stock)
@@ -250,15 +242,9 @@ function searchHistory (stock) {
     $('#history').append(history)
 }
 
-
-
-$(document).on('click',".watchListChild",function() {
-    console.log($(this).text())
+$(document).on('click',".watchListChild",function() {//Listens for the created children of the Watchlist and 
     pullData($(this).text())
-    pullNData($(this).text())
-    pullHData($(this).text())
 })
-
 
 function updateInfo() {
 q1ATH.textContent = '$' + highValue;
@@ -290,8 +276,6 @@ function abbreviateNumber(value) {
     volume = newValue;
     return newValue;
 }
-
-
 
 function priceChanges(){
     perChange = (currentClose - secondToLastClose)/(secondToLastClose) * 100
