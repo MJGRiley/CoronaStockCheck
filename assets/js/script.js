@@ -1,60 +1,165 @@
 var MSAPIKey = '71dcc5160836657f52acf194332c63da'
-var today
+var companyN = document.getElementById('companyName')
 var cData = []
+var histData = []
+var nData = []
+var yData = []
 var form = $('#tickerForm')
 var tArea = $('#tickerSearch')
-var histData
-console.log(MSAPIKey)
+var stockTag = document.getElementById('tickerSymbol')
+var stockHigh = []
+var yearHigh
+var yearLow
+form.submit(dataSpy)
+var defaultTick = 'SPY'
+var searchHistoryArray = []
+var watchlist = $('#history')
+var q1ATH = document.getElementById("Q12020")
+var cPrice = document.getElementById('currentPrice')
+var yearHighs = document.getElementById('allTH')
+var yearLows = document.getElementById('allTL')
+var vol = document.getElementById('volume')
+var dataOne
+var dollarChange;
+var perChange;
+var compName;
+var secondToLastClose;
 
-form.submit( function(event) {
+
+//TODO: issue 26
+//These are all the ids on the HTML page to link the information to
+//(<span id="tickerSymbol">APPL</span>)
+//<span id="companyName">Apple</span>
+//id="Q12020">Insert Q1 All Time High Stock Price Here </p>
+//id="currentPrice">Insert Current Stock Price Here</p>
+//<li>52 Week High: id="allTH"<span></span></li>
+//<li>52 Week Low: id="allTL"<span></span></li>
+//<li>Volume: id="volume"<span></span></li>
+//<li>Open: id="open"<span></span></li>
+//<li>Close: id="Close"<span></span></li>
+
+
+function dataSpy(event) {
     event.preventDefault()
-    pullData(tArea.val())
-    pullHData(tArea.val())
-    console.log("This is the beginning")
-})
+    // need something here to detect and return out of this function if user has input something other than a stock ticker eg: number, string, more?
+    // also a modal pop up to alert the user TODO: issue #34
+    pullData(tArea.val().toUpperCase())
+    pullNData(tArea.val().toUpperCase())
+    pullHData(tArea.val().toUpperCase())
+    pullYTDData(tArea.val().toUpperCase())
+    searchHistory(tArea.val().toUpperCase())
 
-function pullData(stock) {
-    console.log(stock)
-    var qCurrent =  "http://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&symbols=" + stock
-    fetch(qCurrent,{
-        cache: 'reload',
-    })
-    .then(function (res) {
-        return res.json()
-    })
-    .then(function (data) {
-        cData = data
-        today = data.data[0].date
-        localStorage.setItem('cData',JSON.stringify(data))
-    })
 }
 
-
-function pullHData(data) {
-    console.log(data)
-    var qDates = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=2020-01-01&date_to=2020-04-01&symbols=" + data
-    fetch(qDates,{
+function pullData(stock) {//This first pull gets latest daily market info from end of day endpoint
+    var qCurrent = "http://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&symbols=" + stock
+    fetch(qCurrent, {
         cache: 'reload',
     })
-    .then(function (res) {
-        return res.json()
-    })
-    .then(function (data) {
-        console.log(data)
-        histData = data
-        localStorage.setItem('hData',JSON.stringify(data))
-        console.log('q1 high is called')
-        histData = data
-        q1High();
-    })
+        .then(function (res) {
+            return res.json()
+        })
+        .then(function (data) {
+            cData = data
+            console.log(data)
+            localStorage.setItem('cData', JSON.stringify(data))
+        })
 }
 
+function pullNData(stock) {//This API pull gets the company name data from the tickers endpoint
+    var qNData = "https://api.marketstack.com/v1/tickers?access_key=" + MSAPIKey + "&symbols=" + stock
+    fetch(qNData, {
+        cache: 'reload',
+    })
+        .then(function (res) {
+            return res.json()
+        })
+        .then(function (data) {
+            nData = data
+            console.log(data)
+            localStorage.setItem('nData', JSON.stringify(data))
+        })
+}
+
+function pullHData(stock) { //This APi pull gets the historical data from Jan 01 2020 - Apr 01 2020
+    var qHData = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=2020-01-01&date_to=2020-04-01&symbols=" + stock
+    fetch(qHData, {
+        cache: 'reload',
+    })
+        .then(function (res) {
+            return res.json()
+        })
+        .then(function (data) {
+            histData = data
+            console.log(data)
+            localStorage.setItem('hData', JSON.stringify(data))
+            q1High();
+        })
+}
+
+function pullYTDData(stock) {//This API pull gets the 52 week high and low
+    var stockHigh = []      //the API only delivers 100 items in the object
+    var stockLow = []       //so I had to make the API pull 3 times and put them all together
+    var tempArr = []
+    var qYTD1 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(143, 'days').format().substring(0, 10) + "&date_to=" + moment().format().substring(0, 10) + "&symbols=" + stock
+    var qYTD2 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(289, 'days').format().substring(0, 10) + "&date_to=" + moment().subtract(143, 'days').format().substring(0, 10) + "&symbols=" + stock
+    var qYTD3 = "https://api.marketstack.com/v1/eod?access_key=" + MSAPIKey + "&date_from=" + moment().subtract(365, 'days').format().substring(0, 10) + "&date_to=" + moment().subtract(289, 'days').format().substring(0, 10) + "&symbols=" + stock
+    fetch(qYTD1, {
+        cache: 'reload',
+    })
+        .then(function (res) {
+            return res.json()
+        })
+        .then(function (data) {
+            var dataOne = data.data
+            secondToLastClose = data.data[1].close  // gets second to last close for watchlist % 
+            console.log(secondToLastClose)
+            fetch(qYTD2, {
+                cache: 'reload',
+            })
+                .then(function (res) {
+                    return res.json()
+                })
+                .then(function (data) {
+                    var dataTwo = $.merge(dataOne, data.data)
+                    console.log(dataTwo)
+                    fetch(qYTD3, {
+                        cache: 'reload',
+                    })
+                        .then(function (res) {
+                            return res.json()
+                        })
+                        .then(function (data) {
+                            var dataThree = data.data
+                            tempArr = $.merge(dataTwo, dataThree)
+                            console.log(tempArr)
+                            console.log(tempArr.length)
+                            for (i = 0; i < tempArr.length; i++) {
+                                stockHigh.push(tempArr[i].high)
+                                stockLow.push(tempArr[i].low)
+                            }
+                            console.log(stockHigh)
+                            console.log(stockLow)
+                            displayHighLow(stockHigh, stockLow)
+                        })
+                })
+        })
+}
+
+function displayHighLow(stockHigh, stockLow) {
+    stockHigh.sort((a, b) => b - a)
+    stockLow.sort((a, b) => a - b)
+    yearHigh = stockHigh[0]
+    yearLow = stockLow[0]
+    yearHighs.textContent = '$' + yearHigh; //need variable for year high
+    yearLows.textContent = '$' + yearLow;
+
+}
 // CHART .JS ///
 
 // DATA
-var stars = [135850, 52122]; //y-axis VALUES. need a function to pull Q1 2020 stock high
+var stars = [0, 0]; //y-axis VALUES. need a function to pull Q1 2020 stock high
 var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
-
 
 //creating the BAR chart.
 if (this.compChart) this.compChart.destroy();
@@ -64,39 +169,167 @@ var compChart = new Chart(chart, {
     type: 'bar',
     data: {
         labels: frameworks,
-        datasets: [{ 
-            label: "Coronavirus Stock Valuation vs. Current",
-            data: stars
+        datasets: [{
+            label: "Q1 2020 High vs. Current Price",
+            data: stars,
+            backgroundColor: 'rgba(53, 164, 159, 0.65)', ///candle body color TODO: issue #37
+            borderColor: '#ffffa', //candle border color TODO: issue #37
+            borderWidth: 2,
+            borderRadius: 5,
+            borderSkipped: false,
         }]
+    },
+    options: {
+        scales: {
+            x: {
+                grid: {
+                    display: false,
+                }
+            },
+            y: {
+                grid: {
+                    display: false
+                }
+            },
 
-    }
- }
-) 
 
-//need a function to go thru API output object and pull Q1 2020 lowest close for a particular ticker.
-//function will: take ticker input -> use input to call API data -> index thru API data to create array of closing prices between 1/1/2020 - 4/1/2020 ->
-// use a method to get the lowest close value and the index of that value in the array. use index to get date of that closing value.
-// make an object/array to pull dates (text content for graph) between the Q1/2020 time range from
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Q1 2020 Stock Valuation vs. Current Stock Valuation',
+                padding: {
+                    top: 10,
+                    bottom: 10
+                },
+                font: {
+                    size: 20
+                },
+            },
+            legend: {
+                display: false
+            },
+        },
+
+    },
+    style: {
+        backgroundColor: 'rgba(0,0,0,0.0)'
+    },
+
+});
+
 //pull most recent stock close from API for other bar. most recent instead of today because user may use this app on a fed holiday or weekend
 //import data into compChart
-//"tickersearch" is input ID
+//"tickerSearch" is input ID
 
-
-
-function q1High () {
- //var keys = Object.keys(hData)
- console.log(histData)
- // create array of all closes
- var histDataArr =[];
- var histDates = [];
-    for (i =0; i < 63 ; i++){
+function q1High() {
+    var histDataArr = []
+    var histDates = [];
+    for (i = 0; i < 63; i++) {
         histDataArr[i] = histData.data[i].close
         histDates[i] = histData.data[i].date
     }
-    let high = histDataArr.indexOf(Math.max(...histDataArr));
+    //
+    let highIndex = histDataArr.indexOf(Math.max(...histDataArr));
+    highValue = histDataArr[highIndex];
+    highDate = histDates[highIndex];
+    const dateFix = highDate.split("T");
+    highDate = dateFix[0]
+    //console.log('The price high is $' + highValue + ' on ' + highDate)
+    currentClose = cData.data[0].close
+    //console.log(currentClose)
 
+    stars = [highValue, currentClose]; //updates Q1 high graph vs current price when ticker is entered. 
 
+    compChart.data.datasets[0].data = stars;
+    compChart.data.labels = ['Q1 2020 High on ' + highDate, 'Today'];
+
+    compChart.update();
+    updateInfo();
 }
 
 
 
+$(document).ready(function () {
+    pullNData('AAPL')
+    pullData('AAPL')
+    pullYTDData('AAPL')
+    pullHData('AAPL')
+    searchHistory('AAPL')
+})
+
+
+function searchHistory(stock) {
+    if (searchHistoryArray.includes(stock)) { return }
+    searchHistoryArray.push(stock)
+    console.log(searchHistoryArray)
+    var history = document.createElement("p");
+    history.append(stock)
+    history.setAttribute("class", "watchListChild")
+    $('#history').append(history)
+}
+
+$(document).on('click', ".watchListChild", function () {
+    console.log($(this).text())
+    pullData($(this).text())
+    pullNData($(this).text());
+    pullHData($(this).text());
+})
+
+
+function updateInfo() {
+    console.log(highValue)
+    console.log(currentClose)
+    console.log(volume)
+    console.log(nData.data[0].name)
+    console.log(nData.data[0].symbol)
+    q1ATH.textContent = '$' + highValue;
+    cPrice.textContent = '$' + currentClose;
+    volume = cData.data[0].volume;
+    abbreviateNumber(volume);
+    vol.textContent = volume + ' shares traded at last business day';
+    console.log(nData.data[0].name)
+    console.log(nData.data[0].symbol)
+    companyN.textContent = nData.data[0].name;
+    compSymbol = nData.data[0].symbol;
+    stockTag.textContent = compSymbol;
+    priceChanges();
+    if (stars[0] > stars[1]) {
+        compChart.data.datasets[0].backgroundColor = ['rgba(53, 164, 159, 0.65)', 'rgba(255, 0, 0, 1)'];
+        compChart.update();
+    }
+    else {
+        compChart.data.datasets[0].backgroundColor = ['rgba(53, 164, 159, 0.65)', 'rgb(0,128,0)'];
+        compChart.update();
+    }
+}
+
+function abbreviateNumber(value) {
+    var newValue = value;
+    if (value >= 1000) {
+        var suffixes = ["", "k", "m", "b", "t"];
+        var suffixNum = Math.floor(("" + value).length / 3);
+        var shortValue = '';
+        for (var precision = 2; precision >= 1; precision--) {
+            shortValue = parseFloat((suffixNum != 0 ? (value / Math.pow(1000, suffixNum)) : value).toPrecision(precision));
+            var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g, '');
+            if (dotLessShortValue.length <= 2) { break; }
+        }
+        if (shortValue % 1 != 0) shortValue = shortValue.toFixed(1);
+        newValue = shortValue + suffixes[suffixNum];
+    }
+    volume = newValue;
+    return newValue;
+}
+
+
+
+function priceChanges() {
+    perChange = (currentClose - secondToLastClose) / (secondToLastClose) * 100
+    perChange = perChange.toFixed(2) + '%';
+    console.log(perChange);
+    dollarChange = currentClose - secondToLastClose;
+    dollarChange = '$' + dollarChange.toFixed(2);
+    console.log(dollarChange);
+
+}
