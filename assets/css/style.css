@@ -2,9 +2,7 @@ body {
     background-color: rgb(244, 246, 250) !important;
     margin: 0;
     padding: 0;
-
     }
-
 
 header {
     background-color: rgb(42, 91, 165) !important;
@@ -13,9 +11,8 @@ header {
     margin: 0;
     padding: 0px; 
     padding-left: 0px;
-
     }
-      
+
 input#tickerSearch:nth-child(1) {
     padding: 10px;
     padding-bottom: 20px
@@ -57,15 +54,11 @@ li:nth-child(2) {
 li:nth-child(3) {
     background-color: rosybrown;
     color:rgb(244, 246, 250)
-
 }
 
 canvas#compChart:nth-child(4) {
     background-color: navajowhite;
 }
-    
-Q1-2020-High 
-
 
 #notabledata li {
     list-style-type: none;
