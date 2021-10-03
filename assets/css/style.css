@@ -1,9 +1,38 @@
 
 
 body {
-    
+    background-color: rgb(244, 246, 250) !important;
+    margin: 0;
+    padding: 0;
+
+    }
+
+
+header {
+    background-color: rgb(42, 91, 165) !important;
+    color: white;
+    font-size: 15px;
+    margin: 0;
+    padding: 0px; 
+    padding left: 0px;
+
+    }
+      
+
+
+h5 {
+    background-color:rgb(59, 75, 148);
+    color: white;
+    font-size: 15px;
+    margin: 0px
+}
+
+ p.  {
+    background-color: cadetblue !important;
+
 }
 
 #notabledata li {
     list-style-type: none;
 }
+
