@@ -1,5 +1,5 @@
 var MSAPIKey = '71dcc5160836657f52acf194332c63da'
-var cName = document.getElementById('companyName')
+var companyN = document.getElementById('companyName')
 var cData = []
 var histData = []
 var nData = []
@@ -22,6 +22,8 @@ var vol = document.getElementById('volume')
 var dataOne
 var dollarChange;
 var perChange;
+var compName;
+var secondToLastClose;
 
 
 //TODO: issue 26
@@ -46,6 +48,7 @@ function dataSpy(event) {
     pullHData(tArea.val().toUpperCase())
     pullYTDData(tArea.val().toUpperCase())
     searchHistory(tArea.val().toUpperCase())
+
 }
 
 function pullData(stock) {//This first pull gets latest daily market info from end of day endpoint
@@ -72,7 +75,7 @@ function pullNData(stock) {//This API pull gets the company name data from the t
             return res.json()
         })
         .then(function (data) {
-            cName = data
+            nData = data
             console.log(data)
             localStorage.setItem('nData', JSON.stringify(data))
         })
@@ -109,46 +112,46 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
         })
         .then(function (data) {
             var dataOne = data.data
-            secondToLastClose = data.data[1].close 
+            secondToLastClose = data.data[1].close  // gets second to last close for watchlist % 
             console.log(secondToLastClose)
             fetch(qYTD2, {
                 cache: 'reload',
             })
-            .then(function (res) {
-                return res.json()
-            })
-            .then(function (data) {
-                var dataTwo = $.merge(dataOne, data.data)
-                console.log(dataTwo)
-                fetch(qYTD3, {
-                    cache: 'reload',
-                })
                 .then(function (res) {
                     return res.json()
                 })
                 .then(function (data) {
-                    var dataThree = data.data
-                    tempArr = $.merge(dataTwo, dataThree)
-                    console.log(tempArr)
-                    console.log(tempArr.length)
-                    for (i=0;i<tempArr.length;i++) {
-                        stockHigh.push(tempArr[i].high)
-                        stockLow.push(tempArr[i].low)
-                    }
-                    console.log(stockHigh)
-                    console.log(stockLow)
-                    displayHighLow (stockHigh,stockLow)
+                    var dataTwo = $.merge(dataOne, data.data)
+                    console.log(dataTwo)
+                    fetch(qYTD3, {
+                        cache: 'reload',
+                    })
+                        .then(function (res) {
+                            return res.json()
+                        })
+                        .then(function (data) {
+                            var dataThree = data.data
+                            tempArr = $.merge(dataTwo, dataThree)
+                            console.log(tempArr)
+                            console.log(tempArr.length)
+                            for (i = 0; i < tempArr.length; i++) {
+                                stockHigh.push(tempArr[i].high)
+                                stockLow.push(tempArr[i].low)
+                            }
+                            console.log(stockHigh)
+                            console.log(stockLow)
+                            displayHighLow(stockHigh, stockLow)
+                        })
                 })
-            })
-    })
+        })
 }
 
-function displayHighLow(stockHigh,stockLow) {
-    stockHigh.sort((a,b) => b-a)
-    stockLow.sort((a,b) => a-b)
+function displayHighLow(stockHigh, stockLow) {
+    stockHigh.sort((a, b) => b - a)
+    stockLow.sort((a, b) => a - b)
     yearHigh = stockHigh[0]
     yearLow = stockLow[0]
-     yearHighs.textContent = '$' + yearHigh; //need variable for year high
+    yearHighs.textContent = '$' + yearHigh; //need variable for year high
     yearLows.textContent = '$' + yearLow;
 
 }
@@ -167,7 +170,7 @@ var compChart = new Chart(chart, {
     data: {
         labels: frameworks,
         datasets: [{
-            label: "Coronavirus Stock Valuation vs. Current",
+            label: "Q1 2020 High vs. Current Price",
             data: stars,
             backgroundColor: 'rgba(53, 164, 159, 0.65)', ///candle body color TODO: issue #37
             borderColor: '#ffffa', //candle border color TODO: issue #37
@@ -178,23 +181,42 @@ var compChart = new Chart(chart, {
     },
     options: {
         scales: {
-          x: {
-            grid: {
-              display: false,
-            }
-          },
-          y: {
-            grid: {
-              display: false
-            }
-          },
-        
-            
-        }
-      }
-    });
-    
-chart.style.backgroundColor = 'rgba(0,0,0,0.0)'; //chart background color TODO: issue #37
+            x: {
+                grid: {
+                    display: false,
+                }
+            },
+            y: {
+                grid: {
+                    display: false
+                }
+            },
+
+
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Q1 2020 Stock Valuation vs. Current Stock Valuation',
+                padding: {
+                    top: 10,
+                    bottom: 10
+                },
+                font: {
+                    size: 20
+                },
+            },
+            legend: {
+                display: false
+            },
+        },
+
+    },
+    style: {
+        backgroundColor: 'rgba(0,0,0,0.0)'
+    },
+
+});
 
 //pull most recent stock close from API for other bar. most recent instead of today because user may use this app on a fed holiday or weekend
 //import data into compChart
@@ -229,25 +251,25 @@ function q1High() {
 
 
 $(document).ready(function () {
-    pullData('AAPL')
     pullNData('AAPL')
-    pullHData('AAPL')
+    pullData('AAPL')
     pullYTDData('AAPL')
+    pullHData('AAPL')
     searchHistory('AAPL')
 })
 
 
-function searchHistory (stock) {
-    if (searchHistoryArray.includes(stock)){return}
+function searchHistory(stock) {
+    if (searchHistoryArray.includes(stock)) { return }
     searchHistoryArray.push(stock)
     console.log(searchHistoryArray)
     var history = document.createElement("p");
     history.append(stock)
-    history.setAttribute("class","watchListChild")
+    history.setAttribute("class", "watchListChild")
     $('#history').append(history)
 }
 
-$(document).on('click',".watchListChild",function() {
+$(document).on('click', ".watchListChild", function () {
     console.log($(this).text())
     pullData($(this).text())
     pullNData($(this).text());
@@ -256,31 +278,45 @@ $(document).on('click',".watchListChild",function() {
 
 
 function updateInfo() {
-q1ATH.textContent = '$' + highValue;
-cPrice.textContent = '$' + currentClose;
- volume = cData.data[0].volume;
- abbreviateNumber(volume);
-vol.textContent = volume + ' shares traded today'
-compName = nData.data[0].name;
-cName.textContent = compName;
-compSymbol = nData.data[0].symbol;
-stockTag.textContent = compSymbol;
-priceChanges();
+    console.log(highValue)
+    console.log(currentClose)
+    console.log(volume)
+    console.log(nData.data[0].name)
+    console.log(nData.data[0].symbol)
+    q1ATH.textContent = '$' + highValue;
+    cPrice.textContent = '$' + currentClose;
+    volume = cData.data[0].volume;
+    abbreviateNumber(volume);
+    vol.textContent = volume + ' shares traded at last business day';
+    console.log(nData.data[0].name)
+    console.log(nData.data[0].symbol)
+    companyN.textContent = nData.data[0].name;
+    compSymbol = nData.data[0].symbol;
+    stockTag.textContent = compSymbol;
+    priceChanges();
+    if (stars[0] > stars[1]) {
+        compChart.data.datasets[0].backgroundColor = ['rgba(53, 164, 159, 0.65)', 'rgba(255, 0, 0, 1)'];
+        compChart.update();
+    }
+    else {
+        compChart.data.datasets[0].backgroundColor = ['rgba(53, 164, 159, 0.65)', 'rgb(0,128,0)'];
+        compChart.update();
+    }
 }
 
 function abbreviateNumber(value) {
     var newValue = value;
     if (value >= 1000) {
-        var suffixes = ["", "k", "m", "b","t"];
-        var suffixNum = Math.floor( (""+value).length/3 );
+        var suffixes = ["", "k", "m", "b", "t"];
+        var suffixNum = Math.floor(("" + value).length / 3);
         var shortValue = '';
         for (var precision = 2; precision >= 1; precision--) {
-            shortValue = parseFloat( (suffixNum != 0 ? (value / Math.pow(1000,suffixNum) ) : value).toPrecision(precision));
-            var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
+            shortValue = parseFloat((suffixNum != 0 ? (value / Math.pow(1000, suffixNum)) : value).toPrecision(precision));
+            var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g, '');
             if (dotLessShortValue.length <= 2) { break; }
         }
-        if (shortValue % 1 != 0)  shortValue = shortValue.toFixed(1);
-        newValue = shortValue+suffixes[suffixNum];
+        if (shortValue % 1 != 0) shortValue = shortValue.toFixed(1);
+        newValue = shortValue + suffixes[suffixNum];
     }
     volume = newValue;
     return newValue;
@@ -288,12 +324,12 @@ function abbreviateNumber(value) {
 
 
 
-function priceChanges(){
-    perChange = (currentClose - secondToLastClose)/(secondToLastClose) * 100
+function priceChanges() {
+    perChange = (currentClose - secondToLastClose) / (secondToLastClose) * 100
     perChange = perChange.toFixed(2) + '%';
     console.log(perChange);
     dollarChange = currentClose - secondToLastClose;
     dollarChange = '$' + dollarChange.toFixed(2);
     console.log(dollarChange);
-    
+
 }
