@@ -10,7 +10,7 @@ body {
 header {
     background-color: rgb(42, 91, 165) !important;
     color: white;
-    font-size: 15px;
+    font-size: 25px;
     padding: 0px; 
     padding left: 0px;
     height: 250px;
@@ -80,6 +80,8 @@ li:nth-child(3) {
 canvas#compChart:nth-child(4) {
     background-color: rgb(240, 238, 235);
 }
+    
+Q1-2020-High 
 
 
 #notabledata li {
