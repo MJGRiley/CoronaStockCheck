@@ -1,7 +1,3 @@
-.clear {
-    padding: 10px;
-}
-
 body {
     background-color: rgb(244, 246, 250) !important;
     margin: 0;
@@ -16,13 +12,13 @@ header {
     font-size: 15px;
     margin: 0;
     padding: 0px; 
-    padding left: 0px;
+    padding-left: 0px;
 
     }
       
 input#tickerSearch:nth-child(1) {
-    padding: 10px 
-    padding bottom: 20px
+    padding: 10px;
+    padding-bottom: 20px
 }
 
 button:nth-child(2) {
@@ -78,27 +74,3 @@ Q1-2020-High
 #compchart{
     color: black
 }
-.watchListChild {
-    border: 1px solid black;
-}
-
-/* 
-#tickerForm need some padding on left side to get search bar out of margin, 
-right hand side padding on watchlist bar
-
-<body> neutral color
-
-<header> Need color changes to header and text color
-
-class = cardbody Need color and text color on div card bodies for watchlist and the display of data
-
-overall padding and spacing 
-
-make watchListChild look like a button (border, different background color)
-
-Check wireframe mockup:
-
-    neutral colors your choice, but the current price will either be red or green compared to the 2020 Q1 High
-    Same for the graph at the bottom.
-
-*/
