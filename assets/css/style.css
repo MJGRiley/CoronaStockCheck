@@ -17,7 +17,10 @@ header {
 
     }
       
-
+input#tickerSearch:nth-child(1) {
+    padding: 10px 
+    padding bottom: 20px
+}
 
 h5 {
     background-color:rgb(59, 75, 148);
@@ -31,10 +34,14 @@ background-color: rgb(228, 202, 173) !important;
 
 }
 button.popOut:nth-child(1) {
-    background-color: sandybrown;
+    background-color: rgb(192, 214, 243);
+    border-style: double;
+    border-color: steelblue;
+
 
 }
 
 #notabledata li {
     list-style-type: none;
 }
+
