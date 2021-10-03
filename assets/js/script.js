@@ -237,16 +237,21 @@ function searchHistory (stock) {
     searchHistoryArray.push(stock)
     console.log(searchHistoryArray)
     var history = document.createElement("p");
+    var secondHistory= document.createElement("p");
     history.append(stock)
     history.setAttribute("class","watchListChild")
+    secondHistory.append(cData.data[0].high)
+    history.append(secondHistory)
     $('#history').append(history)
 }
+
+
 
 $(document).on('click',".watchListChild",function() {
     console.log($(this).text())
     pullData($(this).text())
-    pullNData($(this).text());
-    pullHData($(this).text());
+    pullNData($(this).text())
+    pullHData($(this).text())
 })
 
 

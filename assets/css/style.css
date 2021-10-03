@@ -1,4 +1,8 @@
-
+.popOut {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
 
 body {
     
@@ -11,3 +15,27 @@ body {
 #compChart{
     color: black
 }
+.watchListChild {
+    border: 1px solid black;
+}
+
+/* 
+#tickerForm need some padding on left side to get search bar out of margin, 
+right hand side padding on watchlist bar
+
+<body> neutral color
+
+<header> Need color changes to header and text color
+
+class = cardbody Need color and text color on div card bodies for watchlist and the display of data
+
+overall padding and spacing 
+
+make watchListChild look like a button (border, different background color)
+
+Check wireframe mockup:
+
+    neutral colors your choice, but the current price will either be red or green compared to the 2020 Q1 High
+    Same for the graph at the bottom.
+
+*/
