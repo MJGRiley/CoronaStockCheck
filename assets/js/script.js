@@ -250,13 +250,7 @@ function q1High() {
 
 
 //When the document loads, show AAPL stock data as the default. 
-$(document).ready(function () {
-    pullNData('AAPL')
-    pullData('AAPL')
-    pullYTDData('AAPL')
-    pullHData('AAPL')
-    searchHistory('AAPL')
-})
+$(document).ready(function () {pullData('AAPL')})
 
 clearWatchList.on('click', function () {
     localStorage.clear();
