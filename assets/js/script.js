@@ -100,8 +100,7 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
     })
     .then(function (data) {
         var dataOne = data.data
-        secondToLastClose = data.data[1].close  // gets second to last close for watchlist % 
-        console.log(secondToLastClose)
+        secondToLastClose = data.data[1].close  // gets second to last close for watch list
         fetch(qYTD2, {
             cache: 'reload',
         })
@@ -110,7 +109,6 @@ function pullYTDData(stock) {//This API pull gets the 52 week high and low
         })
         .then(function (data) {
             var dataTwo = $.merge(dataOne, data.data)// combines the two objects
-            console.log(dataTwo)
                 fetch(qYTD3, {
                 cache: 'reload',
                 })
@@ -238,13 +236,6 @@ $(document).ready(function () {
     searchHistory('AAPL')
 })
 
-clearWatchList.on('click', function () {
-    localStorage.clear();
-    searchHistoryArray = []
-    history.clear()
-    searchHistory()
-})
-
 function searchHistory(stock) {//creates items on the Watch List
     if (searchHistoryArray.includes(stock)) { return }
     searchHistoryArray.push(stock)
@@ -265,18 +256,11 @@ clearWatchList.on('click', function () {//this clears the watch list and localSt
 })
 
 function updateInfo() {
-    console.log(highValue)
-    console.log(currentClose)
-    console.log(volume)
-    console.log(nData.data[0].name)
-    console.log(nData.data[0].symbol)
     q1ATH.textContent = '$' + highValue
     cPrice.textContent = '$' + currentClose
     volume = cData.data[0].volume
     abbreviateNumber(volume)
     vol.textContent = volume + ' shares traded at last business day'
-    console.log(nData.data[0].name)
-    console.log(nData.data[0].symbol)
     companyN.textContent = nData.data[0].name
     compSymbol = nData.data[0].symbol
     stockTag.textContent = compSymbol
@@ -312,8 +296,6 @@ function abbreviateNumber(value) {
 function priceChanges() {
     perChange = (currentClose - secondToLastClose) / (secondToLastClose) * 100
     perChange = perChange.toFixed(2) + '%'
-    console.log(perChange)
     dollarChange = currentClose - secondToLastClose
     dollarChange = '$' + dollarChange.toFixed(2)
-    console.log(dollarChange)
 }

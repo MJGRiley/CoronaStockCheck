@@ -1,40 +1,65 @@
+
 body {
-    background-color: rgb(244, 246, 250) !important;
-    margin: 0;
-    padding: 0;
+    background-color:white !important;
+    height: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
     }
 
 header {
     background-color: rgb(42, 91, 165) !important;
     color: white;
-    font-size: 15px;
-    margin: 0;
+    font-size: 25px;
     padding: 0px; 
     padding-left: 0px;
+    height: 250px;
     }
 
 input#tickerSearch:nth-child(1) {
-    padding: 10px;
-    padding-bottom: 20px
+    padding: 0px;
+    padding-bottom: 0px;
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-left: 20px;
 }
+
+p.watchListChild{
+ background-color: yellow;
+ border-style: double;
+ border-color:rgb(37, 24, 24);
+ position: center
+}
+
 
 button:nth-child(2) {
     background-color: rgb(192, 214, 243);
     border-style: double;
     border-color: steelblue;
+    position: center
+}
+
+form#tickerForm:nth-child(2) {
+    padding: 0px;
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
 
 h5 {
     background-color:rgb(59, 75, 148);
     color: white;
-    font-size: 15px;
+    font-size: 25px;
     margin: 0px
 }
 
 div.card-body {
-background-color: rgb(228, 202, 173) !important;
-
+    background-color: white !important;
+    margin-left: 0px;
 }
+
+div.card.text-center.col-sm-4:nth-child(2) {
+    background-color: grey;
+}
+
 button.popOut:nth-child(1) {
     background-color: rgb(192, 214, 243);
     border-style: double;
@@ -42,7 +67,7 @@ button.popOut:nth-child(1) {
 }
 
 li:nth-child(1) {
-    background-color: olivedrab;
+    background-color: rgb(155, 226, 12);
     color:rgb(244, 246, 250)
 }
 
@@ -52,12 +77,13 @@ li:nth-child(2) {
 }
 
 li:nth-child(3) {
-    background-color: rosybrown;
+    background-color: rgb(37, 24, 24);
     color:rgb(244, 246, 250)
 }
 
 canvas#compChart:nth-child(4) {
-    background-color: navajowhite;
+    background-color: rgb(240, 238, 235);
+    margin: 15px;
 }
 
 #notabledata li {
@@ -65,5 +91,5 @@ canvas#compChart:nth-child(4) {
 }
 
 #compchart{
-    color: black
-}
+    color: black;
+   }
