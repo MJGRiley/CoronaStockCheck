@@ -1,5 +1,6 @@
+
 body {
-    background-color: rgb(42, 91, 165) !important;
+    background-color:white !important;
     height: 0px;
     margin-left: 0px;
     margin-right: 0px;
@@ -14,7 +15,6 @@ header {
     padding left: 0px;
     height: 250px;
     height top: 200px;
-    padding-left: 0px;
 
     }
       
@@ -24,9 +24,15 @@ input#tickerSearch:nth-child(1) {
     padding right: 10px;
     padding left: 10px;
     margin-left: 20px;
-    padding: 10px;
-    padding-bottom: 20px
 }
+
+p.watchListChild{
+ background-color: yellow;
+ border-style: double;
+ border-color:rgb(37, 24, 24);
+ position: center
+}
+
 
 button:nth-child(2) {
     background-color: rgb(192, 214, 243);
@@ -81,10 +87,9 @@ li:nth-child(3) {
 
 canvas#compChart:nth-child(4) {
     background-color: rgb(240, 238, 235);
+    margin: 15px;
 }
     
-Q1-2020-High 
-
 
 #notabledata li {
     list-style-type: none;
@@ -93,6 +98,4 @@ Q1-2020-High
 #compchart{
     color: black;
 
-}
-    color: black
-}
+   }
