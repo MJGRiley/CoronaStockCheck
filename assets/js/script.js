@@ -173,10 +173,10 @@ function errorModal(res) { //This displays a modal if something invalid is put i
 var stars = [0, 0]; //y-axis VALUES. need a function to pull Q1 2020 stock high
 var frameworks = ['Q1 2020 High', 'Today']; /// x-axis LABELS
 
-//creating the BAR chart.
-if (this.compChart) this.compChart.destroy();
-var chart = document.getElementById('compChart');
 
+if (this.compChart) this.compChart.destroy(); //needed to repopulate chart
+var chart = document.getElementById('compChart'); 
+//Creation of new chart with various customization options.
 var compChart = new Chart(chart, {
     type: 'bar',
     data: {
@@ -184,8 +184,8 @@ var compChart = new Chart(chart, {
         datasets: [{
             label: "Q1 2020 High vs. Current Price",
             data: stars,
-            backgroundColor: 'rgba(53, 164, 159, 0.65)', ///candle body color TODO: issue #37
-            borderColor: '#ffffa', //candle border color TODO: issue #37
+            backgroundColor: 'rgba(53, 164, 159, 0.65)', 
+            borderColor: '#ffffa', 
             borderWidth: 2,
             borderRadius: 5,
             borderSkipped: false,
@@ -226,10 +226,8 @@ var compChart = new Chart(chart, {
     },
 });
 
-//pull most recent stock close from API for other bar. most recent instead of today because user may use this app on a fed holiday or weekend
-//import data into compChart
-//"tickerSearch" is input ID
 
+//Function to find the Q1 High of a ticker. Function also updates data of the bar chart. 
 function q1High() {
     var histDataArr = []
     var histDates = [];
@@ -251,7 +249,7 @@ function q1High() {
 }
 
 
-
+//When the document loads, show AAPL stock data as the default. 
 $(document).ready(function () {
     pullNData('AAPL')
     pullData('AAPL')
@@ -287,20 +285,13 @@ clearWatchList.on('click', function () {
     history.clear()
     searchHistory()
 })
-
+//Function to update chart as well as ticker data. The current value bar of the chart will turn green if higher than Q1 High and red otherwise. 
 function updateInfo() {
-    console.log(highValue)
-    console.log(currentClose)
-    console.log(volume)
-    console.log(nData.data[0].name)
-    console.log(nData.data[0].symbol)
     q1ATH.textContent = '$' + highValue;
     cPrice.textContent = '$' + currentClose;
     volume = cData.data[0].volume;
     abbreviateNumber(volume);
     vol.textContent = volume + ' shares traded at last business day';
-    console.log(nData.data[0].name)
-    console.log(nData.data[0].symbol)
     companyN.textContent = nData.data[0].name;
     compSymbol = nData.data[0].symbol;
     stockTag.textContent = compSymbol;
@@ -315,6 +306,7 @@ function updateInfo() {
     }
 }
 
+//Function to turn long share volume number pulled from API into an abbreviation. 
 function abbreviateNumber(value) {
     var newValue = value;
     if (value >= 1000) {
@@ -333,12 +325,3 @@ function abbreviateNumber(value) {
     return newValue;
 }
 
-function priceChanges() {
-    perChange = (currentClose - secondToLastClose) / (secondToLastClose) * 100
-    perChange = perChange.toFixed(2) + '%';
-    console.log(perChange);
-    dollarChange = currentClose - secondToLastClose;
-    dollarChange = '$' + dollarChange.toFixed(2);
-    console.log(dollarChange);
-
-}
