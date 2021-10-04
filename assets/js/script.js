@@ -289,7 +289,7 @@ function updateInfo() {
     companyN.textContent = nData.data[0].name;
     compSymbol = nData.data[0].symbol;
     stockTag.textContent = compSymbol;
-    priceChanges();
+    
     if (stars[0] > stars[1]) {
         compChart.data.datasets[0].backgroundColor = ['rgba(53, 164, 159, 0.65)', 'rgba(255, 0, 0, 1)'];
         compChart.update();
