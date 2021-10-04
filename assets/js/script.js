@@ -46,8 +46,8 @@ function dataSpy(event) {//This function prevents the tArea from clearing on sub
 }
 
 function pullData(stock) {//This first pull checks for an error and gets latest daily market info from end of day endpoint if no error
-    var error = false
-    var qCurrent = "http://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&symbols=" + stock
+    var error = false //please forgive us for leaving off 1 letter
+    var qCurrent = "https://api.marketstack.com/v1/eod/latest?access_key=" + MSAPIKey + "&symbols=" + stock
     fetch(qCurrent, {
         cache: 'reload',
     })
